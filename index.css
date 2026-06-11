@@ -1,0 +1,244 @@
+/* CUSTOM DESIGN SYSTEM & COMPONENT STYLES */
+
+/* Theme Variables */
+:root {
+    /* Light Mode Theme */
+    --color-background: #EEF2FF;
+    --color-surface: #EEF2FF;
+    --color-surface-dim: #E4E9FF;
+    --color-on-surface: #0A0F2C;
+    --color-on-background: #0A0F2C;
+
+    --color-surface-container-lowest: #FFFFFF;
+    --color-surface-container-low: #F0F4FF;
+    --color-surface-container-high: #D8DFFF;
+    --color-surface-container-highest: #C8D1FF;
+
+    --color-primary: #0070A0;
+    --color-primary-container: #00A8CC;
+    --color-on-primary: #FFFFFF;
+
+    --color-secondary: #5B1FAD;
+    --color-on-secondary: #FFFFFF;
+
+    --color-tertiary: #92500A;
+    --color-on-tertiary: #FFFFFF;
+
+    --color-on-surface-variant: #3A4470;
+    --color-outline: #5B6898;
+    --color-outline-variant: #A8B4E8;
+
+    --glow-color: rgba(0, 112, 160, 0.25);
+    --glass-bg: rgba(255, 255, 255, 0.45);
+    --glass-border: rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+    /* Dark Mode Theme — ColorHunt #070F2B #1B1A55 #535C91 #9290C3 */
+    --color-background: #070F2B;
+    --color-surface: #070F2B;
+    --color-surface-dim: #050B1F;
+    --color-on-surface: #DDE3FF;
+    --color-on-background: #DDE3FF;
+
+    --color-surface-container-lowest: #040815;
+    --color-surface-container-low: #0E1535;
+    --color-surface-container-high: #1B2349;
+    --color-surface-container-highest: #232B55;
+
+    --color-primary: #7DD8FF;
+    --color-primary-container: #00C8F0;
+    --color-on-primary: #003547;
+
+    --color-secondary: #C4AAFF;
+    --color-on-secondary: #2D006E;
+
+    --color-tertiary: #FFD080;
+    --color-on-tertiary: #3D2500;
+
+    --color-on-surface-variant: #9BA8D8;
+    --color-outline: #6B78B4;
+    --color-outline-variant: #2E3A70;
+
+    --glow-color: rgba(0, 200, 240, 0.35);
+    --glass-bg: rgba(4, 8, 21, 0.5);
+    --glass-border: rgba(125, 216, 255, 0.08);
+}
+
+/* Global Reset & Scroll Behavior */
+html {
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+}
+
+body {
+    transition: background-color 0.5s ease, color 0.3s ease;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--color-surface-container-lowest);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--color-surface-container-high);
+    border-radius: 5px;
+    border: 2px solid var(--color-surface-container-lowest);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-outline);
+}
+
+/* Custom Visual Utilities */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.organic-blob {
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    animation: morph 8s ease-in-out infinite;
+    transition: border-color 0.5s ease;
+}
+
+@keyframes morph {
+    0% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+    50% { border-radius: 30% 70% 40% 60% / 30% 30% 70% 70%; }
+    100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+}
+
+.glass-panel {
+    backdrop-filter: blur(12px);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.text-glow {
+    text-shadow: 0 0 10px var(--glow-color);
+}
+
+.bloom-primary {
+    box-shadow: 0 0 20px rgba(0, 209, 255, 0.2);
+}
+
+.floating {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Hover glow text utility */
+.text-glow-hover:hover {
+    text-shadow: 0 0 8px var(--glow-color);
+    color: var(--color-primary-container);
+}
+
+/* Active Nav Links styling */
+.nav-active {
+    color: var(--color-primary-container) !important;
+    border-bottom: 2px solid var(--color-primary-container);
+    padding-bottom: 4px;
+    font-weight: 700;
+}
+
+/* Toast Animation */
+.toast-in {
+    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.toast-out {
+    animation: slideOutRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+/* === NEURAL NETWORK THEME === */
+/* Neuron pulse animation */
+@keyframes neuronPulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(125, 216, 255, 0.3);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(125, 216, 255, 0.6);
+        transform: scale(1.05);
+    }
+}
+
+/* Synapse connection animation */
+@keyframes synapseFlow {
+    0% {
+        stroke-dashoffset: 1000;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Neural node glow */
+.neuron-node {
+    animation: neuronPulse 2s ease-in-out infinite;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(125, 216, 255, 0.3), rgba(0, 200, 240, 0.1));
+    border: 2px solid rgba(125, 216, 255, 0.4);
+}
+
+/* Neural connection lines */
+.neural-line {
+    stroke: rgba(125, 216, 255, 0.2);
+    stroke-width: 1.5;
+    fill: none;
+    stroke-dasharray: 1000;
+    animation: synapseFlow 4s linear infinite;
+}
+
+/* ML themed hover effect */
+.ml-hover-glow:hover {
+    box-shadow: 0 0 30px rgba(125, 216, 255, 0.5), inset 0 0 20px rgba(0, 200, 240, 0.1) !important;
+    border-color: rgba(125, 216, 255, 0.8) !important;
+}
+
+/* Competitive platform link styles */
+.cp-link {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.cp-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(125, 216, 255, 0.2), transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.cp-link:hover::before {
+    transform: translateX(100%);
+}
