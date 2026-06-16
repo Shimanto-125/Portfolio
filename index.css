@@ -65,9 +65,40 @@
     --glass-border: rgba(125, 216, 255, 0.08);
 }
 
+.neuron {
+    /* Neuron Theme Colors: Deep space black with electric neon green and cyan glows */
+    --color-background: #02060d;
+    --color-surface: #02060d;
+    --color-surface-dim: #010307;
+    --color-on-surface: #d1ffd6;
+    --color-on-background: #d1ffd6;
+
+    --color-surface-container-lowest: #000103;
+    --color-surface-container-low: #040d1a;
+    --color-surface-container-high: #0b1a30;
+    --color-surface-container-highest: #122847;
+
+    --color-primary: #00ff66; /* Neon green */
+    --color-primary-container: #00e5ff; /* Neon cyan */
+    --color-on-primary: #00330a;
+
+    --color-secondary: #00e5ff;
+    --color-on-secondary: #002c33;
+
+    --color-tertiary: #ccff00; /* Neon yellow-green */
+    --color-on-tertiary: #263300;
+
+    --color-on-surface-variant: #8ebfa3;
+    --color-outline: #22c55e;
+    --color-outline-variant: #14532d;
+
+    --glow-color: rgba(0, 255, 102, 0.45);
+    --glass-bg: rgba(2, 6, 13, 0.65);
+    --glass-border: rgba(0, 255, 102, 0.15);
+}
+
 /* Global Reset & Scroll Behavior */
 html {
-    scroll-behavior: smooth;
     overflow-y: scroll;
 }
 

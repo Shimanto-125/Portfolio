@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>NEURAL_PORTFOLIO | Admin Dashboard</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#070F2B",
+                        "surface-dim": "#050B1F",
+                        "surface-container": "#141C3F",
+                        "surface-container-high": "#1B2349",
+                        "primary": "#7DD8FF",
+                        "primary-container": "#00C8F0",
+                        "secondary": "#C4AAFF",
+                        "secondary-container": "#7C3AED",
+                        "on-surface": "#DDE3FF",
+                        "on-surface-variant": "#9BA8D8"
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts & Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <style>
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            background: rgba(4, 8, 21, 0.6);
+            border: 1px solid rgba(125, 216, 255, 0.08);
+        }
+        .text-glow {
+            text-shadow: 0 0 10px rgba(0, 200, 240, 0.35);
+        }
+    </style>
+</head>
+
+<body class="bg-surface-dim text-on-surface min-h-screen font-['Plus_Jakarta_Sans'] overflow-x-hidden">
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-container" class="fixed inset-0 z-50 flex items-center justify-center bg-background p-6">
+        <div class="glass-panel w-full max-w-md p-8 rounded-3xl space-y-6 shadow-2xl relative border-primary/20">
+            <!-- Glow effect -->
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 blur-[50px] rounded-full"></div>
+            
+            <div class="text-center space-y-2">
+                <div class="inline-flex w-12 h-12 rounded-2xl bg-primary/10 items-center justify-center text-primary mb-2">
+                    <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight text-glow">Neural Admin Login</h1>
+                <p class="text-xs text-on-surface-variant">Authorize core system configuration update protocols</p>
+            </div>
+
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-primary uppercase tracking-wider mb-2">Security ID (Email)</label>
+                    <input type="email" id="login-email" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-primary uppercase tracking-wider mb-2">Access Key (Password)</label>
+                    <input type="password" id="login-password" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <button type="submit" id="login-submit" class="w-full py-3.5 bg-primary-container text-background font-bold rounded-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 mt-6">
+                    <span>Initiate Authentication</span>
+                    <span class="material-symbols-outlined text-base">login</span>
+                </button>
+            </form>
+
+            <div class="text-center border-t border-white/5 pt-4">
+                <a href="index.html" class="text-xs text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span> Return to Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD (HIDDEN BY DEFAULT) -->
+    <div id="dashboard-container" class="hidden flex flex-col min-h-screen">
+        <!-- HEADER -->
+        <header class="border-b border-white/10 bg-background/80 backdrop-blur-md sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-primary-container rounded-lg flex items-center justify-center text-background font-bold text-sm">AS</div>
+                    <div>
+                        <h2 class="font-bold text-sm leading-none text-glow text-primary">Md. Abir Shimanto</h2>
+                        <span class="text-[10px] font-mono text-on-surface-variant uppercase tracking-wider">System Terminal v2.0</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" target="_blank" class="px-4 py-1.5 glass-panel border border-white/10 rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-white/5 hover:border-white/20 transition-all">
+                        <span class="material-symbols-outlined text-base">open_in_new</span> Live Portfolio
+                    </a>
+                    <button id="logout-btn" class="px-4 py-1.5 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg text-xs font-bold flex items-center gap-1.5 hover:bg-red-500/20 transition-all">
+                        <span class="material-symbols-outlined text-base">logout</span> Terminate Session
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTAINER -->
+        <div class="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex flex-col lg:flex-row gap-8">
+            <!-- SIDE NAVIGATION -->
+            <aside class="lg:w-64 flex-shrink-0">
+                <div class="glass-panel p-4 rounded-2xl flex flex-col gap-1 sticky top-24">
+                    <button data-tab="metadata" class="tab-btn w-full px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-semibold text-primary bg-primary/10 transition-all">
+                        <span class="material-symbols-outlined">settings</span> General Settings
+                    </button>
+                    <button data-tab="skills" class="tab-btn w-full px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined">memory</span> Skill Metrics
+                    </button>
+                    <button data-tab="education" class="tab-btn w-full px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined">school</span> Education
+                    </button>
+                    <button data-tab="qualifications" class="tab-btn w-full px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined">workspace_premium</span> Qualifications
+                    </button>
+                    <button data-tab="projects" class="tab-btn w-full px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined">terminal</span> Projects
+                    </button>
+                    <button data-tab="research" class="tab-btn w-full px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all">
+                        <span class="material-symbols-outlined">biotech</span> Research Papers
+                    </button>
+                    <button data-tab="credentials" class="tab-btn w-full px-4 py-3 rounded-xl flex items-center gap-3 text-sm font-semibold text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all mt-6 border-t border-white/5 pt-4">
+                        <span class="material-symbols-outlined">database</span> API Credentials
+                    </button>
+                </div>
+            </aside>
+
+            <!-- DASHBOARD CONTENT PANELS -->
+            <main class="flex-1 space-y-6">
+
+                <!-- 1. GENERAL SETTINGS TAB -->
+                <section id="tab-metadata" class="tab-panel space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-glow text-primary">General Configuration</h3>
+                            <p class="text-xs text-on-surface-variant">Update CV upload link and hero settings</p>
+                        </div>
+                    </div>
+                    <form id="metadata-form" class="glass-panel p-6 rounded-2xl border-white/5 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Hero Role Title</label>
+                                <input type="text" id="meta-hero-role" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Hero Sub-role Title</label>
+                                <input type="text" id="meta-hero-sub-role" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">CV Download URL (or PDF Link)</label>
+                            <input type="text" id="meta-cv-url" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Status Protocols</label>
+                            <select id="meta-is-available" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                                <option value="true">Status: Available for Work / Collaborations</option>
+                                <option value="false">Status: Unavailable / Busy</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="px-6 py-2.5 bg-primary-container text-background font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300">
+                            Save Global Configuration
+                        </button>
+                    </form>
+                </section>
+
+                <!-- 2. SKILL METRICS TAB -->
+                <section id="tab-skills" class="tab-panel hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-glow text-primary">Skill Proficiency Matrix</h3>
+                            <p class="text-xs text-on-surface-variant">Configure skills organized by custom categories</p>
+                        </div>
+                        <button onclick="openSkillModal()" class="px-4 py-2 bg-primary-container text-background text-xs font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm">add</span> Add New Skill
+                        </button>
+                    </div>
+                    
+                    <div class="glass-panel rounded-2xl overflow-hidden border-white/5">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-white/10 bg-white/5 text-xs font-bold text-primary uppercase tracking-wider">
+                                    <th class="px-6 py-4">Skill Name</th>
+                                    <th class="px-6 py-4">Percentage</th>
+                                    <th class="px-6 py-4">Category</th>
+                                    <th class="px-6 py-4">Depth / Latency</th>
+                                    <th class="px-6 py-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="skills-table-body" class="divide-y divide-white/5">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 3. EDUCATION TAB -->
+                <section id="tab-education" class="tab-panel hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-glow text-primary">Academic Records</h3>
+                            <p class="text-xs text-on-surface-variant">Update institutions, departments and degrees</p>
+                        </div>
+                        <button onclick="openEducationModal()" class="px-4 py-2 bg-primary-container text-background text-xs font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm">add</span> Add Record
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-4" id="education-list-container">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- 4. QUALIFICATIONS TAB -->
+                <section id="tab-qualifications" class="tab-panel hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-glow text-primary">Milestones &amp; Credentials</h3>
+                            <p class="text-xs text-on-surface-variant">Professional certificates or degrees</p>
+                        </div>
+                        <button onclick="openQualificationModal()" class="px-4 py-2 bg-primary-container text-background text-xs font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm">add</span> Add Milestone
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-4" id="qualifications-list-container">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- 5. PROJECTS TAB -->
+                <section id="tab-projects" class="tab-panel hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-glow text-primary">Portfolio Projects</h3>
+                            <p class="text-xs text-on-surface-variant">Configure projects with automated ImgBB image uploading</p>
+                        </div>
+                        <button onclick="openProjectModal()" class="px-4 py-2 bg-primary-container text-background text-xs font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm">add</span> Add Project
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-grid-container">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- 6. RESEARCH PAPERS TAB -->
+                <section id="tab-research" class="tab-panel hidden space-y-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-glow text-primary">Research &amp; Publications</h3>
+                            <p class="text-xs text-on-surface-variant">Upload research briefs and paper metadata</p>
+                        </div>
+                        <button onclick="openResearchModal()" class="px-4 py-2 bg-primary-container text-background text-xs font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm">add</span> Add Publication
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="research-grid-container">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </section>
+
+                <!-- 7. CREDENTIALS TAB -->
+                <section id="tab-credentials" class="tab-panel hidden space-y-6">
+                    <div>
+                        <h3 class="text-xl font-bold text-glow text-primary">Security &amp; API Manager</h3>
+                        <p class="text-xs text-on-surface-variant">Update API credentials safely saved directly in your web browser</p>
+                    </div>
+                    
+                    <form id="credentials-form" class="glass-panel p-6 rounded-2xl border-white/5 space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Supabase Project URL</label>
+                            <input type="text" id="cred-supabase-url" placeholder="https://xxx.supabase.co" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Supabase Anon Public API Key</label>
+                            <input type="text" id="cred-supabase-key" placeholder="eyJhbGciOi..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">ImgBB Upload API Key</label>
+                            <input type="text" id="cred-imgbb-key" placeholder="e.g. 5da9..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                        </div>
+                        <button type="submit" class="px-6 py-2.5 bg-primary-container text-background font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300">
+                            Save Locally &amp; Reconnect
+                        </button>
+                    </form>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         MODALS (Dynamic Insert Forms)
+         ============================================== -->
+
+    <!-- Skill Modal -->
+    <div id="skill-modal" class="fixed inset-0 z-40 hidden flex items-center justify-center bg-black/60 p-4">
+        <div class="glass-panel w-full max-w-md p-6 rounded-3xl space-y-4 relative border-primary/20">
+            <h3 id="skill-modal-title" class="text-lg font-bold text-glow text-primary">Add New Skill</h3>
+            <form id="skill-form" class="space-y-4">
+                <input type="hidden" id="skill-id">
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Skill Name</label>
+                    <input type="text" id="skill-name" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Percentage (0-100)</label>
+                        <input type="number" id="skill-percentage" min="0" max="100" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Category (e.g. Languages)</label>
+                        <input type="text" id="skill-category" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Neural Depth (e.g. L9)</label>
+                        <input type="text" id="skill-depth" placeholder="L8" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Latency (e.g. 0.4ms)</label>
+                        <input type="text" id="skill-latency" placeholder="0.5ms" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeModal('skill-modal')" class="px-4 py-2 border border-white/10 rounded-lg text-xs hover:bg-white/5">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary-container text-background font-bold rounded-lg text-xs hover:scale-105 transition-transform">Submit Protocol</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Education Modal -->
+    <div id="education-modal" class="fixed inset-0 z-40 hidden flex items-center justify-center bg-black/60 p-4">
+        <div class="glass-panel w-full max-w-lg p-6 rounded-3xl space-y-4 relative border-primary/20">
+            <h3 id="education-modal-title" class="text-lg font-bold text-glow text-primary">Add Academic Record</h3>
+            <form id="education-form" class="space-y-4">
+                <input type="hidden" id="education-id">
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Institution Name</label>
+                    <input type="text" id="edu-institution" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Degree Title</label>
+                    <input type="text" id="edu-degree" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Department</label>
+                        <input type="text" id="edu-department" placeholder="e.g. CSE" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Grade / CGPA</label>
+                        <input type="text" id="edu-grade" placeholder="e.g. CGPA: 3.82" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Duration</label>
+                    <input type="text" id="edu-duration" required placeholder="e.g. 2020 - 2024" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Description / Bullet points</label>
+                    <textarea id="edu-description" rows="3" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm"></textarea>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeModal('education-modal')" class="px-4 py-2 border border-white/10 rounded-lg text-xs hover:bg-white/5">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary-container text-background font-bold rounded-lg text-xs hover:scale-105 transition-transform">Submit Protocol</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Qualification Modal -->
+    <div id="qualification-modal" class="fixed inset-0 z-40 hidden flex items-center justify-center bg-black/60 p-4">
+        <div class="glass-panel w-full max-w-md p-6 rounded-3xl space-y-4 relative border-primary/20">
+            <h3 id="qualification-modal-title" class="text-lg font-bold text-glow text-primary">Add Milestone Record</h3>
+            <form id="qualification-form" class="space-y-4">
+                <input type="hidden" id="qualification-id">
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Title</label>
+                    <input type="text" id="qual-title" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Subtitle / Institution</label>
+                    <input type="text" id="qual-subtitle" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Type</label>
+                        <select id="qual-type" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                            <option value="Degree">Degree</option>
+                            <option value="Certification">Certification</option>
+                            <option value="Milestone">Milestone</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Duration</label>
+                        <input type="text" id="qual-duration" required placeholder="e.g. 2019 - 2023 or Completed" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeModal('qualification-modal')" class="px-4 py-2 border border-white/10 rounded-lg text-xs hover:bg-white/5">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary-container text-background font-bold rounded-lg text-xs hover:scale-105 transition-transform">Submit Protocol</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="fixed inset-0 z-40 hidden flex items-center justify-center bg-black/60 p-4">
+        <div class="glass-panel w-full max-w-xl p-6 rounded-3xl space-y-4 relative border-primary/20">
+            <h3 id="project-modal-title" class="text-lg font-bold text-glow text-primary">Add Project Record</h3>
+            <form id="project-form" class="space-y-4">
+                <input type="hidden" id="project-id">
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Project Title</label>
+                    <input type="text" id="proj-title" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Description</label>
+                    <textarea id="proj-description" required rows="3" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Image Thumbnail (Direct URL)</label>
+                        <input type="text" id="proj-image-url" placeholder="https://..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Or Upload Image (ImgBB)</label>
+                        <input type="file" id="proj-image-file" accept="image/*" class="w-full text-xs text-on-surface-variant file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Technology Tags (Comma-separated)</label>
+                    <input type="text" id="proj-tags" placeholder="React, AWS, Node.js" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">GitHub Link</label>
+                        <input type="text" id="proj-github" placeholder="https://github.com/..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Live Demo Link</label>
+                        <input type="text" id="proj-live" placeholder="https://..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="proj-visible" checked class="rounded border-white/10 bg-surface-container text-primary-container focus:ring-0">
+                    <label class="text-xs text-on-surface-variant">Publish live on portfolio immediately</label>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeModal('project-modal')" class="px-4 py-2 border border-white/10 rounded-lg text-xs hover:bg-white/5">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary-container text-background font-bold rounded-lg text-xs hover:scale-105 transition-transform">Submit Protocol</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Research Modal -->
+    <div id="research-modal" class="fixed inset-0 z-40 hidden flex items-center justify-center bg-black/60 p-4">
+        <div class="glass-panel w-full max-w-xl p-6 rounded-3xl space-y-4 relative border-primary/20">
+            <h3 id="research-modal-title" class="text-lg font-bold text-glow text-primary">Add Publication</h3>
+            <form id="research-form" class="space-y-4">
+                <input type="hidden" id="research-id">
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Paper Title</label>
+                    <input type="text" id="res-title" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-on-surface-variant mb-1">Authors (Comma-separated)</label>
+                    <input type="text" id="res-authors" required class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Journal / Publisher</label>
+                        <input type="text" id="res-publisher" required placeholder="e.g. IEEE / Neural Systems" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Year</label>
+                        <input type="text" id="res-year" required placeholder="e.g. 2026" class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Thumbnail Image URL</label>
+                        <input type="text" id="res-image-url" placeholder="https://..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">Or Upload Thumbnail</label>
+                        <input type="file" id="res-image-file" accept="image/*" class="w-full text-xs text-on-surface-variant file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">External Link</label>
+                        <input type="text" id="res-link" placeholder="https://..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-on-surface-variant mb-1">PDF File URL</label>
+                        <input type="text" id="res-pdf-url" placeholder="https://..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-2 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="res-visible" checked class="rounded border-white/10 bg-surface-container text-primary-container focus:ring-0">
+                    <label class="text-xs text-on-surface-variant">Publish live on portfolio immediately</label>
+                </div>
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeModal('research-modal')" class="px-4 py-2 border border-white/10 rounded-lg text-xs hover:bg-white/5">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary-container text-background font-bold rounded-lg text-xs hover:scale-105 transition-transform">Submit Protocol</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Alert / Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- Dynamic JS Logic -->
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

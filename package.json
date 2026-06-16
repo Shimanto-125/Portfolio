@@ -1,0 +1,11 @@
+{
+  "name": "neural-portfolio",
+  "version": "2.0.0",
+  "description": "Md. Abir Shimanto Dynamic Neural Portfolio",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node build.js && npx -y http-server -p 3000 -c-1"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

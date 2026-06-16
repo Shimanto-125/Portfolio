@@ -134,28 +134,8 @@
 
     <!-- ATMOSPHERIC BACKGROUND WITH NEURAL NETWORK -->
     <div class="fixed inset-0 z-[-1] overflow-hidden" id="bg-orbs">
-        <!-- Neural network background -->
-        <svg class="absolute inset-0 w-full h-full opacity-5 pointer-events-none">
-            <defs>
-                <filter id="neural-glow">
-                    <feGaussianBlur stdDeviation="2" />
-                    <feComponentTransfer>
-                        <feFuncA type="linear" slope="0.3"/>
-                    </feComponentTransfer>
-                </filter>
-            </defs>
-            <!-- Neural nodes scattered -->
-            <circle cx="15%" cy="20%" r="3" fill="rgba(125, 216, 255, 0.4)" filter="url(#neural-glow)"/>
-            <circle cx="85%" cy="30%" r="2.5" fill="rgba(196, 170, 255, 0.3)" filter="url(#neural-glow)"/>
-            <circle cx="50%" cy="50%" r="2" fill="rgba(255, 208, 128, 0.3)" filter="url(#neural-glow)"/>
-            <circle cx="25%" cy="75%" r="2.5" fill="rgba(125, 216, 255, 0.35)" filter="url(#neural-glow)"/>
-            <circle cx="80%" cy="70%" r="2" fill="rgba(196, 170, 255, 0.25)" filter="url(#neural-glow)"/>
-            <!-- Connecting lines -->
-            <line x1="15%" y1="20%" x2="50%" y2="50%" stroke="rgba(125, 216, 255, 0.1)" stroke-width="0.5"/>
-            <line x1="85%" y1="30%" x2="50%" y2="50%" stroke="rgba(196, 170, 255, 0.1)" stroke-width="0.5"/>
-            <line x1="25%" y1="75%" x2="50%" y2="50%" stroke="rgba(255, 208, 128, 0.1)" stroke-width="0.5"/>
-            <line x1="80%" y1="70%" x2="50%" y2="50%" stroke="rgba(196, 170, 255, 0.08)" stroke-width="0.5"/>
-        </svg>
+        <!-- Neural network dynamic canvas background -->
+        <canvas id="neuron-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-30 transition-opacity duration-1000"></canvas>
         <!-- Gradient orbs -->
         <div class="absolute top-[-15%] left-[-10%] w-[55%] h-[55%] bg-primary/8 blur-[140px] rounded-full"></div>
         <div class="absolute bottom-[-15%] right-[-10%] w-[45%] h-[45%] bg-secondary/10 blur-[140px] rounded-full">
@@ -180,6 +160,8 @@
         <div class="hidden md:flex items-center gap-6">
             <a class="nav-link text-on-surface-variant font-medium hover:text-primary transition-all duration-300"
                 href="#about">About</a>
+            <a class="nav-link text-on-surface-variant font-medium hover:text-primary transition-all duration-300"
+                href="#education">Education</a>
             <a class="nav-link text-on-surface-variant font-medium hover:text-primary transition-all duration-300"
                 href="#skills">Skills</a>
             <a class="nav-link text-on-surface-variant font-medium hover:text-primary transition-all duration-300"
@@ -222,6 +204,8 @@
         <a class="mobile-nav-link text-on-surface-variant font-medium text-2xl hover:text-primary transition-all duration-300"
             href="#about">About</a>
         <a class="mobile-nav-link text-on-surface-variant font-medium text-2xl hover:text-primary transition-all duration-300"
+            href="#education">Education</a>
+        <a class="mobile-nav-link text-on-surface-variant font-medium text-2xl hover:text-primary transition-all duration-300"
             href="#skills">Skills</a>
         <a class="mobile-nav-link text-on-surface-variant font-medium text-2xl hover:text-primary transition-all duration-300"
             href="#technologies">Technologies</a>
@@ -255,8 +239,9 @@
                     <h1 class="font-display-lg text-[26px] md:text-[38px] leading-tight font-bold text-glow">
                         Hey, I'm <br><span class="text-primary-container">Md. Abir Shimanto 👋</span>
                     </h1>
-                    <h2 class="font-headline-md text-[18px] font-semibold text-on-surface-variant opacity-80 italic">I
+                    <h2 class="font-headline-md text-[18px] font-semibold text-on-surface-variant opacity-80 italic" id="hero-role-title">I
                         am a ML Trainer & Engineer</h2>
+                    <h3 class="font-headline-md text-[16px] font-medium text-primary opacity-90" id="hero-subrole-title">Competitive Programmer</h3>
                 </div>
                 <div class="space-y-4 max-w-md">
                     <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
@@ -462,123 +447,21 @@
                 <h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-glow">Skills</h3>
                 <p class="font-label-sm text-primary tracking-widest uppercase">Skill Proficiency Metrics</p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center">
-                <div
-                    class="lg:col-span-2 relative glass-panel rounded-[2.5rem] p-12 border-primary/20 overflow-hidden min-h-[600px] flex items-center justify-center">
-                    <!-- Dots background pattern -->
-                    <div class="absolute inset-0 opacity-10 pointer-events-none"
-                        style="background-image: radial-gradient(circle at 2px 2px, #a4e6ff 1px, transparent 0); background-size: 40px 40px;">
-                    </div>
-
-                    <div class="relative z-10 flex flex-col lg:flex-row items-center justify-center gap-20 w-full">
-                        <!-- Left list -->
-                        <div class="flex flex-col gap-12 w-full lg:w-1/3">
-                            <div
-                                class="glass-panel p-6 rounded-2xl border-primary/20 relative group hover:bg-primary/5 transition-all">
-                                <div class="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-[1px] bg-primary/30"></div>
-                                <div class="flex justify-between items-start mb-4">
-                                    <h4 class="font-headline-md text-lg text-primary">Critical thinking</h4>
-                                    <span
-                                        class="text-[10px] font-label-sm text-primary-container bg-primary/10 px-2 py-0.5 rounded-full">SYNAPSE_LOAD:
-                                        92%</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                                        <div class="h-full bg-primary-container w-[92%] shadow-[0_0_15px_#00d1ff]">
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="flex justify-between text-[10px] font-label-sm text-on-surface-variant opacity-60">
-                                        <span>NEURAL_DEPTH: L9</span>
-                                        <span>LATENCY: 0.4ms</span>
-                                    </div>
-                                </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Left/Center: Dynamic Category Panels -->
+                <div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6" id="skills-container">
+                    <!-- Dynamic skill categories loaded from Supabase -->
+                </div>
+                <!-- Right: Animated Neural Core Visual -->
+                <div class="lg:col-span-4 flex justify-center items-center">
+                    <div class="relative w-64 h-64 flex items-center justify-center">
+                        <div class="absolute inset-0 bg-primary/10 blur-[100px] animate-pulse"></div>
+                        <div class="relative w-48 h-48 rounded-full border-2 border-primary/30 flex items-center justify-center bloom-primary floating">
+                            <div class="w-40 h-40 rounded-full border border-primary/20 flex items-center justify-center bg-surface-container-low/50 backdrop-blur-xl">
+                                <span class="material-symbols-outlined text-6xl text-primary animate-pulse" style="font-variation-settings: 'FILL' 1;">memory</span>
                             </div>
-                            <div
-                                class="glass-panel p-6 rounded-2xl border-secondary/20 relative group hover:bg-secondary/5 transition-all">
-                                <div class="absolute -left-4 top-1/2 -translate-y-1/2 w-8 h-[1px] bg-secondary/30">
-                                </div>
-                                <div class="flex justify-between items-start mb-4">
-                                    <h4 class="font-headline-md text-lg text-secondary">Python & ML Dev</h4>
-                                    <span
-                                        class="text-[10px] font-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded-full">SYNAPSE_LOAD:
-                                        85%</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                                        <div class="h-full bg-secondary w-[85%] shadow-[0_0_15px_#c0c1ff]"></div>
-                                    </div>
-                                    <div
-                                        class="flex justify-between text-[10px] font-label-sm text-on-surface-variant opacity-60">
-                                        <span>NEURAL_DEPTH: L8</span>
-                                        <span>LATENCY: 0.8ms</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Center animated graphic -->
-                        <div class="relative w-64 h-64 flex items-center justify-center">
-                            <div class="absolute inset-0 bg-primary/10 blur-[100px] animate-pulse"></div>
-                            <div
-                                class="relative w-48 h-48 rounded-full border-2 border-primary/30 flex items-center justify-center bloom-primary floating">
-                                <div
-                                    class="w-40 h-40 rounded-full border border-primary/20 flex items-center justify-center bg-surface-container-low/50 backdrop-blur-xl">
-                                    <span class="material-symbols-outlined text-6xl text-primary animate-pulse"
-                                        style="font-variation-settings: 'FILL' 1;">memory</span>
-                                </div>
-                                <div
-                                    class="absolute -inset-4 border border-primary/10 rounded-full animate-[spin_10s_linear_infinite]">
-                                </div>
-                                <div
-                                    class="absolute -inset-8 border border-primary/5 rounded-full animate-[spin_15s_linear_infinite_reverse]">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right list -->
-                        <div class="flex flex-col gap-12 w-full lg:w-1/3">
-                            <div
-                                class="glass-panel p-6 rounded-2xl border-tertiary/20 relative group hover:bg-tertiary/5 transition-all">
-                                <div class="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-[1px] bg-tertiary/30">
-                                </div>
-                                <div class="flex justify-between items-start mb-4">
-                                    <h4 class="font-headline-md text-lg text-tertiary">Competitive Programming</h4>
-                                    <span
-                                        class="text-[10px] font-label-sm text-tertiary bg-tertiary/10 px-2 py-0.5 rounded-full">SYNAPSE_LOAD:
-                                        98%</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                                        <div class="h-full bg-tertiary w-[98%] shadow-[0_0_15px_#ffd59c]"></div>
-                                    </div>
-                                    <div
-                                        class="flex justify-between text-[10px] font-label-sm text-on-surface-variant opacity-60">
-                                        <span>NEURAL_DEPTH: L10</span>
-                                        <span>LATENCY: 0.1ms</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="glass-panel p-6 rounded-2xl border-primary/20 relative group hover:bg-primary/5 transition-all">
-                                <div class="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-[1px] bg-primary/30"></div>
-                                <div class="flex justify-between items-start mb-4">
-                                    <h4 class="font-headline-md text-lg text-primary">Cloud &amp; DevOps</h4>
-                                    <span
-                                        class="text-[10px] font-label-sm text-primary bg-primary/10 px-2 py-0.5 rounded-full">SYNAPSE_LOAD:
-                                        80%</span>
-                                </div>
-                                <div class="space-y-2">
-                                    <div class="h-1 w-full bg-surface-container-highest rounded-full overflow-hidden">
-                                        <div class="h-full bg-primary w-[80%] shadow-[0_0_15px_#a4e6ff]"></div>
-                                    </div>
-                                    <div
-                                        class="flex justify-between text-[10px] font-label-sm text-on-surface-variant opacity-60">
-                                        <span>NEURAL_DEPTH: L7</span>
-                                        <span>LATENCY: 1.2ms</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="absolute -inset-4 border border-primary/10 rounded-full animate-[spin_10s_linear_infinite]"></div>
+                            <div class="absolute -inset-8 border border-primary/5 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
                         </div>
                     </div>
                 </div>
@@ -689,49 +572,29 @@
             </div>
         </section>
 
+        <!-- EDUCATION SECTION -->
+        <section
+            class="mt-40 space-y-20 relative transition-all duration-1000 ease-out opacity-100 translate-y-0 scroll-mt-28"
+            id="education">
+            <div class="text-center space-y-4">
+                <h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-glow">Education</h3>
+                <p class="font-label-sm text-primary tracking-widest uppercase">Academic Foundation</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto" id="education-container">
+                <!-- Dynamic Education loaded from Supabase -->
+            </div>
+        </section>
+
         <!-- QUALIFICATIONS SECTION -->
         <section
             class="mt-40 space-y-20 relative transition-all duration-1000 ease-out opacity-100 translate-y-0 scroll-mt-28"
             id="qualifications">
             <div class="text-center space-y-4">
                 <h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-glow">Qualifications</h3>
-                <p class="font-label-sm text-primary tracking-widest uppercase">Academic &amp; Professional Milestones
-                </p>
+                <p class="font-label-sm text-primary tracking-widest uppercase">Academic &amp; Professional Milestones</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <div
-                    class="glass-panel p-8 rounded-3xl border-primary/10 group hover:bg-primary/5 transition-all duration-500 flex gap-6 items-start">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300 bloom-primary flex-shrink-0">
-                        <span class="material-symbols-outlined text-3xl">school</span>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span
-                                class="text-[10px] font-label-sm text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">Degree</span>
-                            <span class="text-[10px] font-label-sm text-on-surface-variant">2019 - 2023</span>
-                        </div>
-                        <h4 class="font-headline-md text-xl">Bachelor of Science in Computer Science</h4>
-                        <p class="font-body-md text-sm text-on-surface-variant">Neural Institute of Technology</p>
-                    </div>
-                </div>
-
-                <div
-                    class="glass-panel p-8 rounded-3xl border-secondary/10 group hover:bg-secondary/5 transition-all duration-500 flex gap-6 items-start">
-                    <div
-                        class="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_10px_rgba(192,193,255,0.3)] flex-shrink-0">
-                        <span class="material-symbols-outlined text-3xl">workspace_premium</span>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span
-                                class="text-[10px] font-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded-full uppercase">Certification</span>
-                            <span class="text-[10px] font-label-sm text-on-surface-variant">Completed</span>
-                        </div>
-                        <h4 class="font-headline-md text-xl">Machine Learning Specialization</h4>
-                        <p class="font-body-md text-sm text-on-surface-variant">DataCore Academy</p>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto" id="qualifications-container">
+                <!-- Dynamic Qualifications loaded from Supabase -->
             </div>
         </section>
 
@@ -741,64 +604,10 @@
             id="researches">
             <div class="text-center space-y-4">
                 <h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-glow">Research</h3>
-                <p class="font-label-sm text-primary tracking-widest uppercase">Academic &amp; Technical Explorations
-                </p>
+                <p class="font-label-sm text-primary tracking-widest uppercase">Academic &amp; Technical Explorations</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <div
-                    class="glass-panel p-8 rounded-3xl border-primary/10 group hover:bg-primary/5 transition-all duration-500 flex flex-col justify-between gap-6">
-                    <div class="flex gap-6 items-start">
-                        <div
-                            class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300 bloom-primary flex-shrink-0">
-                            <span class="material-symbols-outlined text-3xl">biotech</span>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span
-                                    class="text-[10px] font-label-sm text-primary bg-primary/10 px-2 py-0.5 rounded-full uppercase">Neural
-                                    Systems</span>
-                                <span class="text-[10px] font-label-sm text-on-surface-variant">2023</span>
-                            </div>
-                            <h4 class="font-headline-md text-xl text-glow-hover transition-colors">Neural Network
-                                Optimization Patterns</h4>
-                            <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Exploring weight
-                                pruning and quantization techniques for high-performance edge computing deployment.</p>
-                        </div>
-                    </div>
-                    <button
-                        class="w-full py-3 glass-panel border border-primary/20 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-primary/10 hover:border-primary/40 transition-all"
-                        id="btn-read-paper-1">
-                        <span class="material-symbols-outlined text-sm">description</span> Read Paper
-                    </button>
-                </div>
-
-                <div
-                    class="glass-panel p-8 rounded-3xl border-secondary/10 group hover:bg-secondary/5 transition-all duration-500 flex flex-col justify-between gap-6">
-                    <div class="flex gap-6 items-start">
-                        <div
-                            class="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_10px_rgba(192,193,255,0.3)] flex-shrink-0">
-                            <span class="material-symbols-outlined text-3xl">hub</span>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span
-                                    class="text-[10px] font-label-sm text-secondary bg-secondary/10 px-2 py-0.5 rounded-full uppercase">Distributed
-                                    Systems</span>
-                                <span class="text-[10px] font-label-sm text-on-surface-variant">2022</span>
-                            </div>
-                            <h4 class="font-headline-md text-xl text-glow-hover transition-colors">Distributed Ledger
-                                Efficiency</h4>
-                            <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Analysis of
-                                consensus algorithm latency in high-throughput decentralized application architectures.
-                            </p>
-                        </div>
-                    </div>
-                    <button
-                        class="w-full py-3 glass-panel border border-secondary/20 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-secondary/10 hover:border-secondary/40 transition-all"
-                        id="btn-read-paper-2">
-                        <span class="material-symbols-outlined text-sm">visibility</span> View Abstract
-                    </button>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto" id="researches-container">
+                <!-- Dynamic Research loaded from Supabase -->
             </div>
         </section>
 
@@ -810,122 +619,8 @@
                 <h3 class="font-display-lg text-display-lg-mobile md:text-display-lg text-glow">Projects</h3>
                 <p class="font-label-sm text-primary tracking-widest uppercase">Recent Projects</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1 -->
-                <div
-                    class="glass-panel rounded-3xl overflow-hidden border border-white/10 group hover:border-primary/40 transition-all duration-500 hover:scale-[1.02] flex flex-col justify-between">
-                    <div>
-                        <div class="aspect-video overflow-hidden relative">
-                            <img alt="GameHub Project Thumbnail"
-                                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8j-JpM35uqQH05Qt-6ivwmYoCORyXCV9hrjnIpgYgOkQkGhQBogG-2FFK8YYLItt5K5FNiLrW5PNUFmAsSwrs1jWX-ed0H0ufDBaOMoLNYc903WA7c2lghJM9jgK6q-_ZICraOIo55czk2giYPVtCNZuU-WibYdokOm5iJ17falZR7CvfovW8R7Uj8pluTMewmO_nO2AJmOMlYL5GrVV18nU82dUXeecw5rspcVmDMdiSZyj-QxOrgwEd54oIugLHyGxNra4K6XFQ">
-                            <div class="absolute inset-0 bg-gradient-to-t from-surface-dim to-transparent opacity-60">
-                            </div>
-                        </div>
-                        <div class="p-6 space-y-4">
-                            <h4 class="font-headline-md text-xl text-primary-container">GameHub: The Ultimate
-                                Livestreaming Platform</h4>
-                            <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">A Twitch clone built
-                                with Next.js, Prisma, and Tailwind. Features RTMP/WHIP streaming, real-time chat, and
-                                advanced search.</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span
-                                    class="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-label-sm text-primary">Next.js</span>
-                                <span
-                                    class="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-label-sm text-primary">Prisma</span>
-                                <span
-                                    class="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[10px] font-label-sm text-primary">Tailwind</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0 flex gap-3">
-                        <a class="flex-1 py-2 glass-panel border border-white/10 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-white/5 hover:border-white/20 transition-all"
-                            href="https://github.com" target="_blank" rel="noopener noreferrer">
-                            <span class="material-symbols-outlined text-sm">code</span> GitHub
-                        </a>
-                        <a class="flex-1 py-2 bg-primary-container text-on-primary rounded-xl text-xs font-bold flex items-center justify-center gap-2 bloom-primary hover:scale-105 transition-all"
-                            href="https://example.com" target="_blank" rel="noopener noreferrer">
-                            <span class="material-symbols-outlined text-sm">rocket_launch</span> Live Demo
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div
-                    class="glass-panel rounded-3xl overflow-hidden border border-white/10 group hover:border-secondary/40 transition-all duration-500 hover:scale-[1.02] flex flex-col justify-between">
-                    <div>
-                        <div class="aspect-video overflow-hidden relative">
-                            <img alt="Google Docs 2.0 Project Thumbnail"
-                                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8j-JpM35uqQH05Qt-6ivwmYoCORyXCV9hrjnIpgYgOkQkGhQBogG-2FFK8YYLItt5K5FNiLrW5PNUFmAsSwrs1jWX-ed0H0ufDBaOMoLNYc903WA7c2lghJM9jgK6q-_ZICraOIo55czk2giYPVtCNZuU-WibYdokOm5iJ17falZR7CvfovW8R7Uj8pluTMewmO_nO2AJmOMlYL5GrVV18nU82dUXeecw5rspcVmDMdiSZyj-QxOrgwEd54oIugLHyGxNra4K6XFQ">
-                            <div class="absolute inset-0 bg-gradient-to-t from-surface-dim to-transparent opacity-60">
-                            </div>
-                        </div>
-                        <div class="p-6 space-y-4">
-                            <h4 class="font-headline-md text-xl text-secondary">Google Docs 2.0: Real-Time Collaboration
-                            </h4>
-                            <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Full-stack app with
-                                real-time editing, comments, and notifications. Built with Next.js 14, Firebase, and
-                                TipTap editor.</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span
-                                    class="px-3 py-1 bg-secondary/10 border border-secondary/20 rounded-full text-[10px] font-label-sm text-secondary">TypeScript</span>
-                                <span
-                                    class="px-3 py-1 bg-secondary/10 border border-secondary/20 rounded-full text-[10px] font-label-sm text-secondary">Node.js</span>
-                                <span
-                                    class="px-3 py-1 bg-secondary/10 border border-secondary/20 rounded-full text-[10px] font-label-sm text-secondary">Firebase</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0 flex gap-3">
-                        <a class="flex-1 py-2 glass-panel border border-white/10 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-white/5 hover:border-white/20 transition-all"
-                            href="https://github.com" target="_blank" rel="noopener noreferrer">
-                            <span class="material-symbols-outlined text-sm">code</span> GitHub
-                        </a>
-                        <a class="flex-1 py-2 bg-secondary text-on-secondary rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(192,193,255,0.5)] hover:scale-105 transition-all"
-                            href="https://example.com" target="_blank" rel="noopener noreferrer">
-                            <span class="material-symbols-outlined text-sm">rocket_launch</span> Live Demo
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div
-                    class="glass-panel rounded-3xl overflow-hidden border border-white/10 group hover:border-tertiary/40 transition-all duration-500 hover:scale-[1.02] flex flex-col justify-between">
-                    <div>
-                        <div class="aspect-video overflow-hidden relative">
-                            <img alt="Drive Clone Project Thumbnail"
-                                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8j-JpM35uqQH05Qt-6ivwmYoCORyXCV9hrjnIpgYgOkQkGhQBogG-2FFK8YYLItt5K5FNiLrW5PNUFmAsSwrs1jWX-ed0H0ufDBaOMoLNYc903WA7c2lghJM9jgK6q-_ZICraOIo55czk2giYPVtCNZuU-WibYdokOm5iJ17falZR7CvfovW8R7Uj8pluTMewmO_nO2AJmOMlYL5GrVV18nU82dUXeecw5rspcVmDMdiSZyj-QxOrgwEd54oIugLHyGxNra4K6XFQ">
-                            <div class="absolute inset-0 bg-gradient-to-t from-surface-dim to-transparent opacity-60">
-                            </div>
-                        </div>
-                        <div class="p-6 space-y-4">
-                            <h4 class="font-headline-md text-xl text-tertiary">CloudDrive: Secure File Management</h4>
-                            <p class="font-body-md text-sm text-on-surface-variant leading-relaxed">Modern file storage
-                                platform with role-based permissions, folder hierarchies, advanced search, and seamless
-                                syncing.</p>
-                            <div class="flex flex-wrap gap-2">
-                                <span
-                                    class="px-3 py-1 bg-tertiary/10 border border-tertiary/20 rounded-full text-[10px] font-label-sm text-tertiary">React</span>
-                                <span
-                                    class="px-3 py-1 bg-tertiary/10 border border-tertiary/20 rounded-full text-[10px] font-label-sm text-tertiary">AWS</span>
-                                <span
-                                    class="px-3 py-1 bg-tertiary/10 border border-tertiary/20 rounded-full text-[10px] font-label-sm text-tertiary">PostgreSQL</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6 pt-0 flex gap-3">
-                        <a class="flex-1 py-2 glass-panel border border-white/10 rounded-xl text-xs font-bold flex items-center justify-center gap-2 hover:bg-white/5 hover:border-white/20 transition-all"
-                            href="https://github.com" target="_blank" rel="noopener noreferrer">
-                            <span class="material-symbols-outlined text-sm">code</span> GitHub
-                        </a>
-                        <a class="flex-1 py-2 bg-tertiary text-on-tertiary rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(255,213,156,0.5)] hover:scale-105 transition-all"
-                            href="https://example.com" target="_blank" rel="noopener noreferrer">
-                            <span class="material-symbols-outlined text-sm">rocket_launch</span> Live Demo
-                        </a>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-container">
+                <!-- Dynamic Projects loaded from Supabase -->
             </div>
         </section>
 
@@ -1047,6 +742,8 @@
     </footer>
 
     <!-- Interactive Logic JS -->
+    <script src="config.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     <script src="main.js" defer></script>
 </body>
 
