@@ -33,7 +33,7 @@ export const FALLBACK_METADATA = {
   about_tech_desc: 'Core Engine: TensorFlow, PyTorch, React, Node.js, and Docker.',
   // Contact section
   contact_email: 'abirshimantoas83@gmail.com',
-  contact_location: 'Global Remote / Dhaka, BD',
+  contact_location: 'Dhaka, Bangladesh',
   contact_github: 'https://github.com/Shimanto-125',
   contact_linkedin: 'https://www.linkedin.com/in/abir-shimanto-b10197291',
   // Footer
@@ -58,9 +58,9 @@ export const FALLBACK_QUALIFICATIONS = [
   {
     id: 'fallback-qual-1',
     title: 'Bachelor of Science in Computer Science',
-    subtitle: 'Neural Institute of Technology',
+    subtitle: 'Dhaka City College(NU)',
     type: 'Degree',
-    duration: '2019 - 2023',
+    duration: '2021 - 2026',
   },
   {
     id: 'fallback-qual-2',
