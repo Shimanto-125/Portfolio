@@ -192,7 +192,7 @@ export default function HeroSection({
             <span className="material-symbols-outlined text-base">send</span>
           </button>
           <button
-            onClick={() => { if (cvUrl && cvUrl !== '#') window.open(cvUrl, '_blank'); }}
+            onClick={() => { if (cvUrl && cvUrl !== 'https://drive.google.com/file/d/1V0C248sTu0yZ7dHiXjijHwUwsAsQvQRt/view?usp=sharing') window.open(cvUrl, '_blank'); }}
             className="px-6 py-2.5 glass-panel text-[var(--color-on-surface)] border border-[var(--color-primary)]/20 rounded-xl hover:bg-[var(--color-primary)]/10 transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer"
           >
             <span>{heroSecondaryBtn || 'Download CV'}</span>
