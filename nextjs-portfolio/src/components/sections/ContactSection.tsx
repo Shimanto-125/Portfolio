@@ -82,13 +82,13 @@ export default function ContactSection({
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <input name="name" className="bg-[var(--color-surface-container-high)] border border-[var(--glass-border)] rounded-xl px-4 py-3 focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-[var(--color-on-surface)] w-full font-['Inter']" placeholder="Identity" type="text" required />
-              <input name="email" className="bg-[var(--color-surface-container-high)] border border-[var(--glass-border)] rounded-xl px-4 py-3 focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-[var(--color-on-surface)] w-full font-['Inter']" placeholder="Neural Path (Email)" type="email" required />
+              <input name="email" className="bg-[var(--color-surface-container-high)] border border-[var(--glass-border)] rounded-xl px-4 py-3 focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-[var(--color-on-surface)] w-full font-['Inter']" placeholder="abc@gmail.com" type="email" required />
             </div>
-            <input name="subject" className="w-full bg-[var(--color-surface-container-high)] border border-[var(--glass-border)] rounded-xl px-4 py-3 focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-[var(--color-on-surface)] font-['Inter']" placeholder="Subject Profile" type="text" required />
-            <textarea name="message" className="w-full bg-[var(--color-surface-container-high)] border border-[var(--glass-border)] rounded-xl px-4 py-3 focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-[var(--color-on-surface)] font-['Inter']" placeholder="Encoded Message" rows={4} required />
+            <input name="subject" className="w-full bg-[var(--color-surface-container-high)] border border-[var(--glass-border)] rounded-xl px-4 py-3 focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-[var(--color-on-surface)] font-['Inter']" placeholder="Subject" type="text" required />
+            <textarea name="message" className="w-full bg-[var(--color-surface-container-high)] border border-[var(--glass-border)] rounded-xl px-4 py-3 focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-[var(--color-on-surface)] font-['Inter']" placeholder="Message" rows={4} required />
             <button className="w-full py-4 bg-[var(--color-primary-container)] text-[var(--color-on-primary)] font-bold rounded-xl bloom-primary hover:scale-[1.02] active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               type="submit" disabled={loading}>
-              <span>{loading ? 'Transmitting Data...' : 'Transmit Data'}</span>
+              <span>{loading ? 'Transmitting Data...' : 'Send Message'}</span>
               <span className={`material-symbols-outlined ${loading ? 'animate-spin' : ''}`}>{loading ? 'sync' : 'settings_ethernet'}</span>
             </button>
           </form>
