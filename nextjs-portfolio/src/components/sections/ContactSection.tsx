@@ -12,7 +12,7 @@ interface ContactProps {
 
 export default function ContactSection({
   contactEmail = 'abirshimantoas83@gmail.com',
-  contactLocation = 'Global Remote / Dhaka, BD',
+  contactLocation = 'Dhaka, Bangladesh',
   contactGithub = 'https://github.com/Shimanto-125',
   contactLinkedin = 'https://www.linkedin.com/in/abir-shimanto-b10197291',
 }: ContactProps) {
