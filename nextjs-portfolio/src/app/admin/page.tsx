@@ -43,6 +43,7 @@ export default function AdminPage() {
   const [metaHeroDescription, setMetaHeroDescription] = useState('');
   const [metaHeroPrimaryBtn, setMetaHeroPrimaryBtn] = useState('');
   const [metaHeroSecondaryBtn, setMetaHeroSecondaryBtn] = useState('');
+  const [metaHeroImageUrl, setMetaHeroImageUrl] = useState('');
   // Social links
   const [metaSocialGithub, setMetaSocialGithub] = useState('');
   const [metaSocialLinkedin, setMetaSocialLinkedin] = useState('');
@@ -100,6 +101,7 @@ export default function AdminPage() {
       setMetaHeroDescription(map.hero_description || '');
       setMetaHeroPrimaryBtn(map.hero_primary_btn || '');
       setMetaHeroSecondaryBtn(map.hero_secondary_btn || '');
+      setMetaHeroImageUrl(map.hero_image_url || '');
       setMetaSocialGithub(map.social_github || '');
       setMetaSocialLinkedin(map.social_linkedin || '');
       setMetaSocialEmail(map.social_email || '');
@@ -166,6 +168,7 @@ export default function AdminPage() {
       { key: 'hero_description', value: metaHeroDescription },
       { key: 'hero_primary_btn', value: metaHeroPrimaryBtn },
       { key: 'hero_secondary_btn', value: metaHeroSecondaryBtn },
+      { key: 'hero_image_url', value: metaHeroImageUrl },
     ];
     const { error } = await supabase.from('site_metadata').upsert(payload, { onConflict: 'key' });
     alert(error ? error.message : 'Settings saved!');
@@ -424,6 +427,15 @@ export default function AdminPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div><label className={labelCls}>Primary Button Text</label><input className={inp} value={metaHeroPrimaryBtn} onChange={e => setMetaHeroPrimaryBtn(e.target.value)} placeholder="Say Hello" /></div>
                   <div><label className={labelCls}>Secondary Button Text</label><input className={inp} value={metaHeroSecondaryBtn} onChange={e => setMetaHeroSecondaryBtn(e.target.value)} placeholder="Download CV" /></div>
+                </div>
+                <div>
+                  <label className={labelCls}>Hero Profile Image URL</label>
+                  <input className={inp} value={metaHeroImageUrl} onChange={e => setMetaHeroImageUrl(e.target.value)} placeholder="https://example.com/photo.jpg or Google Drive link" />
+                  {metaHeroImageUrl && (
+                    <div className="mt-2 rounded-xl overflow-hidden w-20 h-20 border border-[var(--glass-border)]">
+                      <img src={resolveImageUrl(metaHeroImageUrl)} alt="hero preview" className="w-full h-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                    </div>
+                  )}
                 </div>
                 <div><label className={labelCls}>CV Download URL</label><input className={inp} value={metaCvUrl} onChange={e => setMetaCvUrl(e.target.value)} /></div>
                 <div><label className={labelCls}>Status</label>

@@ -15,6 +15,7 @@ export function resolveImageUrl(url: string): string {
 export const FALLBACK_METADATA = {
   cv_url: 'https://drive.google.com/file/d/1V0C248sTu0yZ7dHiXjijHwUwsAsQvQRt/view?usp=sharing',
   is_available: 'true',
+  hero_image_url: '',
   hero_role: 'ML Trainer & Engineer',
   hero_sub_role: 'ML Engineer,Competitive Programmer',
   hero_greeting: '',

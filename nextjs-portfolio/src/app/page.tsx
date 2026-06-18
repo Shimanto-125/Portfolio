@@ -97,6 +97,7 @@ export default function HomePage() {
           heroDescription={metadata.hero_description}
           heroPrimaryBtn={metadata.hero_primary_btn}
           heroSecondaryBtn={metadata.hero_secondary_btn}
+          heroImageUrl={metadata.hero_image_url}
           competitiveProfiles={competitiveProfiles}
           socialGithub={metadata.social_github}
           socialLinkedin={metadata.social_linkedin}
