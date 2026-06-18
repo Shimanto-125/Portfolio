@@ -444,6 +444,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (heroSubroleEl && metadata.hero_sub_role) {
             heroSubroleEl.textContent = metadata.hero_sub_role;
         }
+        const heroImgEl = document.getElementById("hero-profile-img");
+        if (heroImgEl && metadata.hero_image_url) {
+            heroImgEl.src = metadata.hero_image_url;
+        }
         
         // Update Status indicator in About section if available
         const statusBadge = document.querySelector("#about [class*='text-[10px] font-label-sm']");
@@ -521,7 +525,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
         container.innerHTML = items.map(item => `
             <div class="glass-panel p-8 rounded-3xl border-primary/10 group hover:bg-primary/5 transition-all duration-500 flex gap-6 items-start">
-                <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300 bloom-primary flex-shrink-0">
+                <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300 bloom-primary shrink-0">
                     <span class="material-symbols-outlined text-3xl">school</span>
                 </div>
                 <div class="space-y-2 w-full">
@@ -543,7 +547,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!container) return;
         container.innerHTML = items.map(item => `
             <div class="glass-panel p-8 rounded-3xl border-secondary/10 group hover:bg-secondary/5 transition-all duration-500 flex gap-6 items-start">
-                <div class="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_10px_rgba(192,193,255,0.3)] flex-shrink-0">
+                <div class="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-300 shadow-[0_0_10px_rgba(192,193,255,0.3)] shrink-0">
                     <span class="material-symbols-outlined text-3xl">${item.type === 'Degree' ? 'school' : 'workspace_premium'}</span>
                 </div>
                 <div class="space-y-2 w-full">
@@ -647,7 +651,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div>
                         <div class="aspect-video overflow-hidden relative">
                             <img alt="${item.title}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" src="${item.image_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuD8j-JpM35uqQH05Qt-6ivwmYoCORyXCV9hrjnIpgYgOkQkGhQBogG-2FFK8YYLItt5K5FNiLrW5PNUFmAsSwrs1jWX-ed0H0ufDBaOMoLNYc903WA7c2lghJM9jgK6q-_ZICraOIo55czk2giYPVtCNZuU-WibYdokOm5iJ17falZR7CvfovW8R7Uj8pluTMewmO_nO2AJmOMlYL5GrVV18nU82dUXeecw5rspcVmDMdiSZyj-QxOrgwEd54oIugLHyGxNra4K6XFQ'}">
-                            <div class="absolute inset-0 bg-gradient-to-t from-surface-dim to-transparent opacity-60"></div>
+                            <div class="absolute inset-0 bg-linear-to-t from-surface-dim to-transparent opacity-60"></div>
                         </div>
                         <div class="p-6 space-y-4">
                             <h4 class="font-headline-md text-xl text-${color}-container font-bold">${item.title}</h4>
@@ -816,14 +820,14 @@ document.addEventListener("DOMContentLoaded", () => {
         toast.className = "glass-panel p-4 rounded-xl flex items-start gap-3 border-primary-container/20 shadow-lg pointer-events-auto toast-in min-w-[280px] max-w-[350px]";
 
         toast.innerHTML = `
-            <div class="w-8 h-8 rounded-lg bg-primary-container/10 flex items-center justify-center text-primary-container flex-shrink-0">
+            <div class="w-8 h-8 rounded-lg bg-primary-container/10 flex items-center justify-center text-primary-container shrink-0">
                 <span class="material-symbols-outlined text-lg">${iconName}</span>
             </div>
             <div class="flex-1 min-w-0">
                 <div class="text-xs font-label-sm text-primary uppercase font-bold tracking-wider truncate">${title}</div>
                 <div class="text-xs font-body-md text-on-surface mt-1 leading-normal">${message}</div>
             </div>
-            <button class="text-on-surface-variant hover:text-primary transition-colors focus:outline-none flex-shrink-0 class-close">
+            <button class="text-on-surface-variant hover:text-primary transition-colors focus:outline-none shrink-0 class-close">
                 <span class="material-symbols-outlined text-sm">close</span>
             </button>
         `;

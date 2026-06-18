@@ -196,8 +196,30 @@
                                 <option value="false">Status: Unavailable / Busy</option>
                             </select>
                         </div>
-                        <button type="submit" class="px-6 py-2.5 bg-primary-container text-background font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300">
-                            Save Global Configuration
+
+                        <!-- Hero Profile Image -->
+                        <div class="border-t border-white/5 pt-4 space-y-3">
+                            <label class="block text-xs font-semibold text-primary uppercase tracking-wider">Hero Profile Image</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Direct Image URL</label>
+                                    <input type="text" id="meta-hero-image-url" placeholder="https://..." class="w-full bg-surface-container/60 border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:border-primary-container focus:ring-0 transition-all text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2">Or Upload via ImgBB</label>
+                                    <input type="file" id="meta-hero-image-file" accept="image/*" class="w-full text-xs text-on-surface-variant file:mr-4 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                                </div>
+                            </div>
+                            <!-- Preview -->
+                            <div id="meta-hero-image-preview" class="hidden">
+                                <p class="text-[10px] text-on-surface-variant mb-1 uppercase tracking-wider">Current Preview</p>
+                                <img id="meta-hero-preview-img" src="" alt="Hero Preview" class="w-20 h-20 rounded-xl object-cover border border-white/10 opacity-80">
+                            </div>
+                        </div>
+
+                        <button type="submit" id="meta-save-btn" class="px-6 py-2.5 bg-primary-container text-background font-bold rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2">
+                            <span>Save Global Configuration</span>
+                            <span class="material-symbols-outlined text-base">save</span>
                         </button>
                     </form>
                 </section>

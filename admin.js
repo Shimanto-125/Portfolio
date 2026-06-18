@@ -243,16 +243,20 @@ async function loadMetadata() {
         const { data, error } = await supabaseClient.from("site_metadata").select("*");
         if (error) throw error;
 
-        // Map keys to DOM inputs
         const metadataMap = {};
-        data.forEach(item => {
-            metadataMap[item.key] = item.value;
-        });
+        data.forEach(item => { metadataMap[item.key] = item.value; });
 
         document.getElementById("meta-hero-role").value = metadataMap.hero_role || "";
         document.getElementById("meta-hero-sub-role").value = metadataMap.hero_sub_role || "";
         document.getElementById("meta-cv-url").value = metadataMap.cv_url || "";
         document.getElementById("meta-is-available").value = metadataMap.is_available || "true";
+
+        const heroImageUrl = metadataMap.hero_image_url || "";
+        document.getElementById("meta-hero-image-url").value = heroImageUrl;
+        if (heroImageUrl) {
+            document.getElementById("meta-hero-preview-img").src = heroImageUrl;
+            document.getElementById("meta-hero-image-preview").classList.remove("hidden");
+        }
     } catch (e) {
         showToast("Error Loading Settings", e.message, "error");
     }
@@ -262,24 +266,58 @@ const metadataForm = document.getElementById("metadata-form");
 if (metadataForm) {
     metadataForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+        const saveBtn = document.getElementById("meta-save-btn");
+        const originalBtnHTML = saveBtn.innerHTML;
+
         const hero_role = document.getElementById("meta-hero-role").value.trim();
         const hero_sub_role = document.getElementById("meta-hero-sub-role").value.trim();
         const cv_url = document.getElementById("meta-cv-url").value.trim();
         const is_available = document.getElementById("meta-is-available").value;
+        let hero_image_url = document.getElementById("meta-hero-image-url").value.trim();
+
+        // Handle ImgBB upload if file selected
+        const fileInput = document.getElementById("meta-hero-image-file");
+        if (fileInput && fileInput.files.length > 0) {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `<span>Uploading Image...</span><span class="material-symbols-outlined animate-spin text-base">sync</span>`;
+            const uploadedUrl = await uploadImageToImgBB(fileInput.files[0]);
+            if (uploadedUrl) {
+                hero_image_url = uploadedUrl;
+                document.getElementById("meta-hero-image-url").value = hero_image_url;
+                document.getElementById("meta-hero-preview-img").src = hero_image_url;
+                document.getElementById("meta-hero-image-preview").classList.remove("hidden");
+            } else {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalBtnHTML;
+                return;
+            }
+        }
+
+        // Update preview for direct URL input
+        if (hero_image_url) {
+            document.getElementById("meta-hero-preview-img").src = hero_image_url;
+            document.getElementById("meta-hero-image-preview").classList.remove("hidden");
+        }
 
         const payload = [
             { key: 'hero_role', value: hero_role },
             { key: 'hero_sub_role', value: hero_sub_role },
             { key: 'cv_url', value: cv_url },
-            { key: 'is_available', value: is_available }
+            { key: 'is_available', value: is_available },
+            { key: 'hero_image_url', value: hero_image_url }
         ];
 
         try {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `<span>Saving...</span><span class="material-symbols-outlined animate-spin text-base">sync</span>`;
             const { error } = await supabaseClient.from("site_metadata").upsert(payload, { onConflict: 'key' });
             if (error) throw error;
             showToast("Settings Updated", "Global settings updated successfully.", "check_circle");
         } catch (err) {
             showToast("Settings Error", err.message, "error");
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalBtnHTML;
         }
     });
 }
@@ -887,14 +925,14 @@ function showToast(title, message, iconName = "notifications") {
     toast.className = "glass-panel p-4 rounded-xl flex items-start gap-3 border-primary-container/20 shadow-lg pointer-events-auto min-w-[280px] max-w-[350px] transition-all duration-300 transform translate-x-[120%] opacity-0";
     
     toast.innerHTML = `
-        <div class="w-8 h-8 rounded-lg bg-primary-container/10 flex items-center justify-center text-primary-container flex-shrink-0">
+        <div class="w-8 h-8 rounded-lg bg-primary-container/10 flex items-center justify-center text-primary-container shrink-0">
             <span class="material-symbols-outlined text-lg">${iconName}</span>
         </div>
         <div class="flex-1 min-w-0">
             <div class="text-xs font-mono text-primary uppercase font-bold tracking-wider truncate">${title}</div>
             <div class="text-xs mt-1 leading-normal">${message}</div>
         </div>
-        <button class="text-on-surface-variant hover:text-primary transition-colors focus:outline-none flex-shrink-0 cursor-pointer" onclick="this.parentElement.remove()">
+        <button class="text-on-surface-variant hover:text-primary transition-colors focus:outline-none shrink-0 cursor-pointer" onclick="this.parentElement.remove()">
             <span class="material-symbols-outlined text-sm">close</span>
         </button>
     `;
