@@ -1,12 +1,14 @@
 'use client';
 
 import { TECH_STACK } from '@/lib/constants';
+import { resolveImageUrl } from '@/lib/constants';
 
 interface TechItem {
   id?: string | number;
   name: string;
   label?: string;
   icon?: string;
+  image_url?: string;
   type: string;
 }
 
@@ -26,8 +28,14 @@ export default function TechnologiesSection({ items }: Props) {
       <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-8 md:gap-12">
         {stack.map((tech) => (
           <div key={(tech as TechItem).id ?? tech.name} className="flex flex-col items-center gap-3 group">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full glass-panel border border-[var(--color-primary)]/20 flex items-center justify-center group-hover:border-[var(--color-primary)] group-hover:scale-110 transition-all duration-300 bloom-primary">
-              {tech.type === 'text' ? (
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full glass-panel border border-[var(--color-primary)]/20 flex items-center justify-center group-hover:border-[var(--color-primary)] group-hover:scale-110 transition-all duration-300 bloom-primary overflow-hidden">
+              {tech.type === 'image' && (tech as TechItem).image_url ? (
+                <img
+                  src={resolveImageUrl((tech as TechItem).image_url!)}
+                  alt={tech.name}
+                  className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                />
+              ) : tech.type === 'text' ? (
                 <span className="text-xl font-bold text-[var(--color-primary)]">{tech.label}</span>
               ) : (
                 <span className="material-symbols-outlined text-3xl text-[var(--color-primary)]">{tech.icon}</span>

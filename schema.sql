@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS public.technologies (
     name VARCHAR(255) NOT NULL,
     label VARCHAR(50),
     icon VARCHAR(255),
+    image_url TEXT,
     type VARCHAR(50) NOT NULL DEFAULT 'icon',
     display_order INTEGER DEFAULT 0,
     is_visible BOOLEAN DEFAULT true NOT NULL,

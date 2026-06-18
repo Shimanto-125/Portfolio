@@ -7,6 +7,76 @@ import { resolveImageUrl } from '@/lib/constants';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyData = any;
 
+const inp = "w-full bg-[var(--color-surface-container)]/60 border border-[var(--glass-border)] rounded-xl px-4 py-2.5 text-[var(--color-on-surface)] focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-sm";
+const labelCls = "block text-xs font-semibold text-[var(--color-on-surface-variant)] uppercase tracking-wider mb-1.5";
+
+function TechnologyModal({ editingItem, technologiesList, onSubmit, onCancel }: {
+  editingItem: AnyData;
+  technologiesList: AnyData[];
+  onSubmit: (e: React.FormEvent) => void;
+  onCancel: () => void;
+}) {
+  const [type, setType] = useState<string>(editingItem?.type || 'icon');
+  const [imageUrl, setImageUrl] = useState<string>(editingItem?.image_url || '');
+
+  return (
+    <form onSubmit={onSubmit} className="space-y-4">
+      <h3 className="text-lg font-bold text-glow text-[var(--color-primary)]">{editingItem ? 'Edit Technology' : 'Add Technology'}</h3>
+      <input type="hidden" name="id" defaultValue={editingItem?.id || ''} />
+      <div><label className={labelCls}>Name</label><input name="name" required className={inp} defaultValue={editingItem?.name || ''} placeholder="Python" /></div>
+      <div>
+        <label className={labelCls}>Display Type</label>
+        <select name="type" required className={inp} value={type} onChange={e => setType(e.target.value)}>
+          <option value="icon">Icon (Material Symbol)</option>
+          <option value="text">Text Label (e.g. JS, PY)</option>
+          <option value="image">Image / Logo URL</option>
+        </select>
+      </div>
+
+      {type === 'text' && (
+        <div>
+          <label className={labelCls}>Text Label</label>
+          <input name="label" className={inp} defaultValue={editingItem?.label || ''} placeholder="PY" />
+        </div>
+      )}
+
+      {type === 'icon' && (
+        <div>
+          <label className={labelCls}>Material Icon Name</label>
+          <input name="icon" className={inp} defaultValue={editingItem?.icon || ''} placeholder="deployed_code" />
+          <p className="mt-1 text-[10px] text-[var(--color-on-surface-variant)] font-mono opacity-60">Examples: deployed_code, javascript, database, storage, cloud, hub, palette, dock, account_tree</p>
+        </div>
+      )}
+
+      {type === 'image' && (
+        <div>
+          <label className={labelCls}>Image / Logo URL (direct link or Google Drive)</label>
+          <input name="image_url" className={inp} value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="https://example.com/logo.png" />
+          {imageUrl && (
+            <div className="mt-2 w-14 h-14 rounded-xl overflow-hidden border border-[var(--glass-border)] flex items-center justify-center bg-[var(--color-surface-container)]/40">
+              <img src={resolveImageUrl(imageUrl)} alt="preview" className="w-10 h-10 object-contain" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 gap-4">
+        <div><label className={labelCls}>Display Order</label><input name="display_order" type="number" min="0" className={inp} defaultValue={editingItem?.display_order ?? technologiesList.length} /></div>
+        <div className="flex items-end pb-2">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" name="is_visible" defaultChecked={editingItem?.is_visible ?? true} className="rounded border-[var(--glass-border)]" />
+            <span className="text-xs text-[var(--color-on-surface-variant)]">Show on portfolio</span>
+          </label>
+        </div>
+      </div>
+      <div className="flex justify-end gap-3 pt-2">
+        <button type="button" onClick={onCancel} className="px-4 py-2 border border-[var(--glass-border)] rounded-lg text-xs cursor-pointer">Cancel</button>
+        <button type="submit" className="px-4 py-2 bg-[var(--color-primary-container)] text-[var(--color-on-primary)] font-bold rounded-lg text-xs cursor-pointer">Submit</button>
+      </div>
+    </form>
+  );
+}
+
 type Tab = 'metadata' | 'siteinfo' | 'skills' | 'education' | 'qualifications' | 'projects' | 'research' | 'competitive' | 'technologies';
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
@@ -341,6 +411,7 @@ export default function AdminPage() {
       type,
       label: type === 'text' ? fd.get('label') as string : null,
       icon: type === 'icon' ? fd.get('icon') as string : null,
+      image_url: type === 'image' ? fd.get('image_url') as string : null,
       display_order: parseInt(fd.get('display_order') as string) || 0,
       is_visible: (form.querySelector('input[name=is_visible]') as HTMLInputElement)?.checked ?? true,
     };
@@ -351,9 +422,6 @@ export default function AdminPage() {
     loadAll();
   };
 
-  // Input style
-  const inp = "w-full bg-[var(--color-surface-container)]/60 border border-[var(--glass-border)] rounded-xl px-4 py-2.5 text-[var(--color-on-surface)] focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-sm";
-  const labelCls = "block text-xs font-semibold text-[var(--color-on-surface-variant)] uppercase tracking-wider mb-1.5";
 
   if (checking) return <div className="min-h-screen flex items-center justify-center bg-[var(--color-surface-dim)]"><span className="material-symbols-outlined text-4xl animate-spin text-[var(--color-primary)]">sync</span></div>;
 
@@ -907,42 +975,12 @@ export default function AdminPage() {
 
             {/* TECHNOLOGY MODAL */}
             {modal === 'technology' && (
-              <form onSubmit={saveTechnology} className="space-y-4">
-                <h3 className="text-lg font-bold text-glow text-[var(--color-primary)]">{editingItem ? 'Edit Technology' : 'Add Technology'}</h3>
-                <input type="hidden" name="id" defaultValue={editingItem?.id || ''} />
-                <div><label className={labelCls}>Name</label><input name="name" required className={inp} defaultValue={editingItem?.name || ''} placeholder="Python" /></div>
-                <div>
-                  <label className={labelCls}>Display Type</label>
-                  <select name="type" required className={inp} defaultValue={editingItem?.type || 'icon'}>
-                    <option value="icon">Icon (Material Symbol)</option>
-                    <option value="text">Text Label (e.g. JS, PY)</option>
-                  </select>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className={labelCls}>Text Label <span className="normal-case font-normal opacity-60">(type=text only)</span></label>
-                    <input name="label" className={inp} defaultValue={editingItem?.label || ''} placeholder="PY" />
-                  </div>
-                  <div>
-                    <label className={labelCls}>Material Icon Name <span className="normal-case font-normal opacity-60">(type=icon only)</span></label>
-                    <input name="icon" className={inp} defaultValue={editingItem?.icon || ''} placeholder="deployed_code" />
-                  </div>
-                </div>
-                <p className="text-[10px] text-[var(--color-on-surface-variant)] font-mono opacity-60">Icon names: deployed_code, javascript, database, storage, cloud, hub, palette, dock, account_tree…</p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div><label className={labelCls}>Display Order</label><input name="display_order" type="number" min="0" className={inp} defaultValue={editingItem?.display_order ?? technologiesList.length} /></div>
-                  <div className="flex items-end pb-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" name="is_visible" defaultChecked={editingItem?.is_visible ?? true} className="rounded border-[var(--glass-border)]" />
-                      <span className="text-xs text-[var(--color-on-surface-variant)]">Show on portfolio</span>
-                    </label>
-                  </div>
-                </div>
-                <div className="flex justify-end gap-3 pt-2">
-                  <button type="button" onClick={() => setModal(null)} className="px-4 py-2 border border-[var(--glass-border)] rounded-lg text-xs cursor-pointer">Cancel</button>
-                  <button type="submit" className="px-4 py-2 bg-[var(--color-primary-container)] text-[var(--color-on-primary)] font-bold rounded-lg text-xs cursor-pointer">Submit</button>
-                </div>
-              </form>
+              <TechnologyModal
+                editingItem={editingItem}
+                technologiesList={technologiesList}
+                onSubmit={saveTechnology}
+                onCancel={() => setModal(null)}
+              />
             )}
 
             {/* RESEARCH MODAL */}
