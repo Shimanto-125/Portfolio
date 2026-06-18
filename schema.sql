@@ -94,6 +94,23 @@ ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_metadata ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.competitive_profiles ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies before recreating (safe to re-run)
+DROP POLICY IF EXISTS "Allow public read-only access" ON public.skills;
+DROP POLICY IF EXISTS "Allow public read-only access" ON public.education;
+DROP POLICY IF EXISTS "Allow public read-only access" ON public.qualifications;
+DROP POLICY IF EXISTS "Allow public read-only access" ON public.researches;
+DROP POLICY IF EXISTS "Allow public read-only access" ON public.projects;
+DROP POLICY IF EXISTS "Allow public read-only access" ON public.site_metadata;
+DROP POLICY IF EXISTS "Allow public read-only access" ON public.competitive_profiles;
+
+DROP POLICY IF EXISTS "Allow authenticated full control" ON public.skills;
+DROP POLICY IF EXISTS "Allow authenticated full control" ON public.education;
+DROP POLICY IF EXISTS "Allow authenticated full control" ON public.qualifications;
+DROP POLICY IF EXISTS "Allow authenticated full control" ON public.researches;
+DROP POLICY IF EXISTS "Allow authenticated full control" ON public.projects;
+DROP POLICY IF EXISTS "Allow authenticated full control" ON public.site_metadata;
+DROP POLICY IF EXISTS "Allow authenticated full control" ON public.competitive_profiles;
+
 -- Public Read-Only Access Policies
 CREATE POLICY "Allow public read-only access" ON public.skills FOR SELECT USING (true);
 CREATE POLICY "Allow public read-only access" ON public.education FOR SELECT USING (true);
@@ -112,61 +129,3 @@ CREATE POLICY "Allow authenticated full control" ON public.projects FOR ALL TO a
 CREATE POLICY "Allow authenticated full control" ON public.site_metadata FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow authenticated full control" ON public.competitive_profiles FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
--- Seed Initial Metadata
-INSERT INTO public.site_metadata (key, value) VALUES
-('cv_url', 'https://drive.google.com/file/d/1V0C248sTu0yZ7dHiXjijHwUwsAsQvQRt/view?usp=sharing'),
-('is_available', 'true'),
-('hero_role', 'ML Trainer & Engineer'),
-('hero_sub_role', 'ML Engineer,Competitive Programmer'),
-('hero_greeting', ''),
-('hero_description', ''),
-('hero_primary_btn', 'Say Hello'),
-('hero_secondary_btn', 'Download CV'),
-('social_github', 'https://github.com/Shimanto-125'),
-('social_linkedin', 'https://www.linkedin.com/in/abir-shimanto-b10197291'),
-('social_email', 'abirshimantoas83@gmail.com'),
-('about_image_url', ''),
-('about_bio', 'I am a machine learning architect and trainer specializing in high-performance neural computation and intelligent digital ecosystems.'),
-('about_experience', '3+ Years Professional AI/ML Engineering & Training'),
-('about_projects_label', '150+ Nodes'),
-('about_tech_desc', 'Core Engine: TensorFlow, PyTorch, React, Node.js, and Docker.'),
-('contact_email', 'abirshimantoas83@gmail.com'),
-('contact_location', 'Dhaka, Bangladesh'),
-('contact_github', 'https://github.com/Shimanto-125'),
-('contact_linkedin', 'https://www.linkedin.com/in/abir-shimanto-b10197291'),
-('footer_title', 'ML Trainer'),
-('footer_name', 'Abir Shimanto')
-ON CONFLICT (key) DO NOTHING;
-
--- Seed default skills
-INSERT INTO public.skills (name, percentage, category, neural_depth, latency) VALUES
-('Critical thinking', 92, 'Critical', 'L9', '0.4ms'),
-('Python & ML Dev', 85, 'ML & Dev', 'L8', '0.8ms'),
-('Competitive Programming', 98, 'Competitive', 'L10', '0.1ms'),
-('Cloud & DevOps', 80, 'DevOps', 'L7', '1.2ms')
-ON CONFLICT DO NOTHING;
-
--- Seed default education
-INSERT INTO public.education (institution, degree, department, duration, grade, description) VALUES
-('American International University-Bangladesh', 'Bachelor of Science in Computer Science & Engineering', 'CSE', '2020 - 2024', 'CGPA: 3.82', 'Specialized in Intelligent Systems and Algorithms. Active member of AIUB Computer Club and Competitive Programming Wing.')
-ON CONFLICT DO NOTHING;
-
--- Seed default qualifications
-INSERT INTO public.qualifications (title, subtitle, type, duration) VALUES
-('Bachelor of Science in Computer Science', 'Neural Institute of Technology', 'Degree', '2019 - 2023'),
-('Machine Learning Specialization', 'DataCore Academy', 'Certification', 'Completed')
-ON CONFLICT DO NOTHING;
-
--- Seed default competitive profiles
-INSERT INTO public.competitive_profiles (platform, username, profile_url, problems_solved, rank, rating, display_order) VALUES
-('codeforces', 'Shimanto-125', 'https://codeforces.com/profile/Shimanto-125', 0, 'Pupil', 0, 0),
-('leetcode', 'AbirShimanto', 'https://leetcode.com/u/AbirShimanto', 0, '', 0, 1),
-('codechef', 'shimanto125', 'https://www.codechef.com/users/shimanto125', 0, '3 Star', 0, 2)
-ON CONFLICT DO NOTHING;
-
--- Seed default projects
-INSERT INTO public.projects (title, description, image_url, tags, github_url, live_url) VALUES
-('GameHub: The Ultimate Livestreaming Platform', 'A Twitch clone built with Next.js, Prisma, and Tailwind. Features RTMP/WHIP streaming, real-time chat, and advanced search.', '', ARRAY['Next.js', 'Prisma', 'Tailwind'], 'https://github.com', 'https://example.com'),
-('Google Docs 2.0: Real-Time Collaboration', 'Full-stack app with real-time editing, comments, and notifications. Built with Next.js 14, Firebase, and TipTap editor.', '', ARRAY['TypeScript', 'Node.js', 'Firebase'], 'https://github.com', 'https://example.com'),
-('CloudDrive: Secure File Management', 'Modern file storage platform with role-based permissions, folder hierarchies, advanced search, and seamless syncing.', '', ARRAY['React', 'AWS', 'PostgreSQL'], 'https://github.com', 'https://example.com')
-ON CONFLICT DO NOTHING;

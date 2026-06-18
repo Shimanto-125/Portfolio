@@ -11,8 +11,54 @@ document.addEventListener("DOMContentLoaded", () => {
     initConnections();
     setupAuthListeners();
     setupTabControls();
+    setupFirstTimeSetup();
     checkActiveSession();
 });
+
+// First-time setup form (on login screen, shown when no credentials exist)
+function setupFirstTimeSetup() {
+    const supabaseUrl = window.ENV?.SUPABASE_URL || localStorage.getItem("SUPABASE_URL");
+    const supabaseKey = window.ENV?.SUPABASE_ANON_KEY || localStorage.getItem("SUPABASE_ANON_KEY");
+
+    // Show the setup section on the login page only if no credentials found
+    if (!supabaseUrl || !supabaseKey) {
+        const setupSection = document.getElementById("setup-section");
+        if (setupSection) setupSection.classList.remove("hidden");
+    }
+
+    const setupForm = document.getElementById("setup-credentials-form");
+    if (setupForm) {
+        setupForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const url = document.getElementById("setup-supabase-url").value.trim();
+            const key = document.getElementById("setup-supabase-key").value.trim();
+            const imgbb = document.getElementById("setup-imgbb-key").value.trim();
+
+            if (!url || !key) {
+                showToast("Missing Credentials", "Supabase URL and Anon Key are required.", "error");
+                return;
+            }
+
+            localStorage.setItem("SUPABASE_URL", url);
+            localStorage.setItem("SUPABASE_ANON_KEY", key);
+            if (imgbb) localStorage.setItem("IMGBB_API_KEY", imgbb);
+
+            showToast("Credentials Saved", "Reinitializing connection...", "check_circle");
+            setTimeout(() => window.location.reload(), 1000);
+        });
+    }
+}
+
+function toggleSetup() {
+    const wrapper = document.getElementById("setup-form-wrapper");
+    const icon = document.getElementById("setup-toggle-icon");
+    const label = document.getElementById("setup-toggle-label");
+    const isHidden = wrapper.classList.contains("hidden");
+
+    wrapper.classList.toggle("hidden", !isHidden);
+    icon.textContent = isHidden ? "expand_less" : "expand_more";
+    label.textContent = isHidden ? "Hide Setup" : "First Time? Configure Supabase";
+}
 
 // Initialize Supabase & ImgBB connections
 function initConnections() {
