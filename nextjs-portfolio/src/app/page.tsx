@@ -38,6 +38,7 @@ export default function HomePage() {
   const [researches, setResearches] = useState<AnyData[]>(FALLBACK_RESEARCHES);
   const [projects, setProjects] = useState<AnyData[]>(FALLBACK_PROJECTS);
   const [competitiveProfiles, setCompetitiveProfiles] = useState<AnyData[]>(FALLBACK_COMPETITIVE_PROFILES);
+  const [technologies, setTechnologies] = useState<AnyData[]>([]);
 
   useEffect(() => {
     async function loadData() {
@@ -75,6 +76,10 @@ export default function HomePage() {
         // Competitive Profiles
         const { data: cpData } = await supabase.from('competitive_profiles').select('*').order('display_order');
         if (cpData && cpData.length > 0) setCompetitiveProfiles(cpData);
+
+        // Technologies
+        const { data: techData } = await supabase.from('technologies').select('*').eq('is_visible', true).order('display_order');
+        if (techData && techData.length > 0) setTechnologies(techData);
       } catch (err) {
         console.error('Failed to load data from Supabase:', err);
       }
@@ -122,7 +127,7 @@ export default function HomePage() {
           isAvailable={metadata.is_available}
         />
         <SkillsSection skills={skills} />
-        <TechnologiesSection />
+        <TechnologiesSection items={technologies} />
         <EducationSection items={education} />
         <QualificationsSection items={qualifications} />
         <ResearchSection items={researches} />

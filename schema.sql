@@ -71,7 +71,19 @@ CREATE TABLE IF NOT EXISTS public.site_metadata (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
--- 8. COMPETITIVE PROFILES TABLE
+-- 8. TECHNOLOGIES TABLE
+CREATE TABLE IF NOT EXISTS public.technologies (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    label VARCHAR(50),
+    icon VARCHAR(255),
+    type VARCHAR(50) NOT NULL DEFAULT 'icon',
+    display_order INTEGER DEFAULT 0,
+    is_visible BOOLEAN DEFAULT true NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- 9. COMPETITIVE PROFILES TABLE
 CREATE TABLE IF NOT EXISTS public.competitive_profiles (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     platform VARCHAR(100) NOT NULL,
@@ -92,6 +104,7 @@ ALTER TABLE public.qualifications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.researches ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_metadata ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.technologies ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.competitive_profiles ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies before recreating (safe to re-run)
@@ -101,6 +114,7 @@ DROP POLICY IF EXISTS "Allow public read-only access" ON public.qualifications;
 DROP POLICY IF EXISTS "Allow public read-only access" ON public.researches;
 DROP POLICY IF EXISTS "Allow public read-only access" ON public.projects;
 DROP POLICY IF EXISTS "Allow public read-only access" ON public.site_metadata;
+DROP POLICY IF EXISTS "Allow public read-only access" ON public.technologies;
 DROP POLICY IF EXISTS "Allow public read-only access" ON public.competitive_profiles;
 
 DROP POLICY IF EXISTS "Allow authenticated full control" ON public.skills;
@@ -109,6 +123,7 @@ DROP POLICY IF EXISTS "Allow authenticated full control" ON public.qualification
 DROP POLICY IF EXISTS "Allow authenticated full control" ON public.researches;
 DROP POLICY IF EXISTS "Allow authenticated full control" ON public.projects;
 DROP POLICY IF EXISTS "Allow authenticated full control" ON public.site_metadata;
+DROP POLICY IF EXISTS "Allow authenticated full control" ON public.technologies;
 DROP POLICY IF EXISTS "Allow authenticated full control" ON public.competitive_profiles;
 
 -- Public Read-Only Access Policies
@@ -118,6 +133,7 @@ CREATE POLICY "Allow public read-only access" ON public.qualifications FOR SELEC
 CREATE POLICY "Allow public read-only access" ON public.researches FOR SELECT USING (true);
 CREATE POLICY "Allow public read-only access" ON public.projects FOR SELECT USING (true);
 CREATE POLICY "Allow public read-only access" ON public.site_metadata FOR SELECT USING (true);
+CREATE POLICY "Allow public read-only access" ON public.technologies FOR SELECT USING (true);
 CREATE POLICY "Allow public read-only access" ON public.competitive_profiles FOR SELECT USING (true);
 
 -- Authenticated Write Access Policies
@@ -127,5 +143,6 @@ CREATE POLICY "Allow authenticated full control" ON public.qualifications FOR AL
 CREATE POLICY "Allow authenticated full control" ON public.researches FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow authenticated full control" ON public.projects FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow authenticated full control" ON public.site_metadata FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Allow authenticated full control" ON public.technologies FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow authenticated full control" ON public.competitive_profiles FOR ALL TO authenticated USING (true) WITH CHECK (true);
 

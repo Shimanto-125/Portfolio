@@ -7,7 +7,7 @@ import { resolveImageUrl } from '@/lib/constants';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyData = any;
 
-type Tab = 'metadata' | 'siteinfo' | 'skills' | 'education' | 'qualifications' | 'projects' | 'research' | 'competitive';
+type Tab = 'metadata' | 'siteinfo' | 'skills' | 'education' | 'qualifications' | 'projects' | 'research' | 'competitive' | 'technologies';
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'metadata', label: 'Hero Settings', icon: 'settings' },
@@ -18,6 +18,7 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'projects', label: 'Projects', icon: 'terminal' },
   { id: 'research', label: 'Research Papers', icon: 'biotech' },
   { id: 'competitive', label: 'CP Profiles', icon: 'emoji_events' },
+  { id: 'technologies', label: 'Technologies', icon: 'hub' },
 ];
 
 function escapeHtml(str: string) {
@@ -69,6 +70,7 @@ export default function AdminPage() {
   const [projectsList, setProjectsList] = useState<AnyData[]>([]);
   const [researchList, setResearchList] = useState<AnyData[]>([]);
   const [competitiveList, setCompetitiveList] = useState<AnyData[]>([]);
+  const [technologiesList, setTechnologiesList] = useState<AnyData[]>([]);
 
   // Modal states
   const [modal, setModal] = useState<string | null>(null);
@@ -135,6 +137,9 @@ export default function AdminPage() {
     // Competitive Profiles
     const { data: cp } = await supabase.from('competitive_profiles').select('*').order('display_order');
     if (cp) setCompetitiveList(cp);
+    // Technologies
+    const { data: tc } = await supabase.from('technologies').select('*').order('display_order');
+    if (tc) setTechnologiesList(tc);
   }, []);
 
   useEffect(() => { if (loggedIn) loadAll(); }, [loggedIn, loadAll]);
@@ -321,6 +326,27 @@ export default function AdminPage() {
     const id = fd.get('id') as string;
     if (id) { await supabase.from('competitive_profiles').update(payload).eq('id', id); }
     else { await supabase.from('competitive_profiles').insert(payload); }
+    setModal(null);
+    loadAll();
+  };
+
+  const saveTechnology = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!supabase) return;
+    const form = e.target as HTMLFormElement;
+    const fd = new FormData(form);
+    const type = fd.get('type') as string;
+    const payload = {
+      name: fd.get('name') as string,
+      type,
+      label: type === 'text' ? fd.get('label') as string : null,
+      icon: type === 'icon' ? fd.get('icon') as string : null,
+      display_order: parseInt(fd.get('display_order') as string) || 0,
+      is_visible: (form.querySelector('input[name=is_visible]') as HTMLInputElement)?.checked ?? true,
+    };
+    const id = fd.get('id') as string;
+    if (id) { await supabase.from('technologies').update(payload).eq('id', id); }
+    else { await supabase.from('technologies').insert(payload); }
     setModal(null);
     loadAll();
   };
@@ -677,6 +703,45 @@ export default function AdminPage() {
             </section>
           )}
 
+          {/* TECHNOLOGIES TAB */}
+          {activeTab === 'technologies' && (
+            <section className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold text-glow text-[var(--color-primary)]">Tech Stack</h3>
+                <button onClick={() => { setEditingItem(null); setModal('technology'); }} className="px-4 py-2 bg-[var(--color-primary-container)] text-[var(--color-on-primary)] text-xs font-bold rounded-xl hover:scale-105 transition-all cursor-pointer flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm">add</span> Add Technology
+                </button>
+              </div>
+              <div className="glass-panel rounded-2xl overflow-hidden">
+                <table className="w-full text-left text-sm">
+                  <thead><tr className="border-b border-[var(--glass-border)] bg-[var(--color-on-surface)]/5 text-xs font-bold text-[var(--color-primary)] uppercase tracking-wider">
+                    <th className="px-6 py-4">Name</th>
+                    <th className="px-6 py-4">Type</th>
+                    <th className="px-6 py-4">Label / Icon</th>
+                    <th className="px-6 py-4">Order</th>
+                    <th className="px-6 py-4">Visible</th>
+                    <th className="px-6 py-4 text-right">Actions</th>
+                  </tr></thead>
+                  <tbody className="divide-y divide-[var(--glass-border)]">
+                    {technologiesList.map(t => (
+                      <tr key={t.id}>
+                        <td className="px-6 py-4 font-bold">{t.name}</td>
+                        <td className="px-6 py-4"><span className="px-2 py-0.5 bg-[var(--color-on-surface)]/5 border border-[var(--glass-border)] rounded text-xs">{t.type}</span></td>
+                        <td className="px-6 py-4 font-mono text-xs">{t.type === 'text' ? t.label : t.icon}</td>
+                        <td className="px-6 py-4">{t.display_order}</td>
+                        <td className="px-6 py-4"><span className={`text-xs font-bold ${t.is_visible ? 'text-green-400' : 'text-red-400'}`}>{t.is_visible ? 'Yes' : 'No'}</span></td>
+                        <td className="px-6 py-4 text-right space-x-2">
+                          <button onClick={() => { setEditingItem(t); setModal('technology'); }} className="text-[var(--color-primary)] hover:underline text-xs cursor-pointer">Edit</button>
+                          <button onClick={() => deleteItem('technologies', t.id)} className="text-red-400 hover:underline text-xs cursor-pointer">Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+
           {/* RESEARCH TAB */}
           {activeTab === 'research' && (
             <section className="space-y-6">
@@ -826,6 +891,46 @@ export default function AdminPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div><label className={labelCls}>Display Order (0=top-right, 1=left, 2=bottom-right)</label><input name="display_order" type="number" min="0" max="2" className={inp} defaultValue={editingItem?.display_order ?? 0} /></div>
+                  <div className="flex items-end pb-2">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" name="is_visible" defaultChecked={editingItem?.is_visible ?? true} className="rounded border-[var(--glass-border)]" />
+                      <span className="text-xs text-[var(--color-on-surface-variant)]">Show on portfolio</span>
+                    </label>
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 pt-2">
+                  <button type="button" onClick={() => setModal(null)} className="px-4 py-2 border border-[var(--glass-border)] rounded-lg text-xs cursor-pointer">Cancel</button>
+                  <button type="submit" className="px-4 py-2 bg-[var(--color-primary-container)] text-[var(--color-on-primary)] font-bold rounded-lg text-xs cursor-pointer">Submit</button>
+                </div>
+              </form>
+            )}
+
+            {/* TECHNOLOGY MODAL */}
+            {modal === 'technology' && (
+              <form onSubmit={saveTechnology} className="space-y-4">
+                <h3 className="text-lg font-bold text-glow text-[var(--color-primary)]">{editingItem ? 'Edit Technology' : 'Add Technology'}</h3>
+                <input type="hidden" name="id" defaultValue={editingItem?.id || ''} />
+                <div><label className={labelCls}>Name</label><input name="name" required className={inp} defaultValue={editingItem?.name || ''} placeholder="Python" /></div>
+                <div>
+                  <label className={labelCls}>Display Type</label>
+                  <select name="type" required className={inp} defaultValue={editingItem?.type || 'icon'}>
+                    <option value="icon">Icon (Material Symbol)</option>
+                    <option value="text">Text Label (e.g. JS, PY)</option>
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className={labelCls}>Text Label <span className="normal-case font-normal opacity-60">(type=text only)</span></label>
+                    <input name="label" className={inp} defaultValue={editingItem?.label || ''} placeholder="PY" />
+                  </div>
+                  <div>
+                    <label className={labelCls}>Material Icon Name <span className="normal-case font-normal opacity-60">(type=icon only)</span></label>
+                    <input name="icon" className={inp} defaultValue={editingItem?.icon || ''} placeholder="deployed_code" />
+                  </div>
+                </div>
+                <p className="text-[10px] text-[var(--color-on-surface-variant)] font-mono opacity-60">Icon names: deployed_code, javascript, database, storage, cloud, hub, palette, dock, account_tree…</p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div><label className={labelCls}>Display Order</label><input name="display_order" type="number" min="0" className={inp} defaultValue={editingItem?.display_order ?? technologiesList.length} /></div>
                   <div className="flex items-end pb-2">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input type="checkbox" name="is_visible" defaultChecked={editingItem?.is_visible ?? true} className="rounded border-[var(--glass-border)]" />
