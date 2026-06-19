@@ -10,6 +10,65 @@ type AnyData = any;
 const inp = "w-full bg-[var(--color-surface-container)]/60 border border-[var(--glass-border)] rounded-xl px-4 py-2.5 text-[var(--color-on-surface)] focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-sm";
 const labelCls = "block text-xs font-semibold text-[var(--color-on-surface-variant)] uppercase tracking-wider mb-1.5";
 
+async function uploadToStorage(file: File, folder: string): Promise<string> {
+  if (!supabase) throw new Error('Supabase not configured');
+  const ext = file.name.split('.').pop() || 'png';
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const path = `${folder}/${Date.now()}_${safeName}`;
+  const { error } = await supabase.storage.from('portfolio-images').upload(path, file, { upsert: true, contentType: file.type });
+  if (error) throw error;
+  const { data } = supabase.storage.from('portfolio-images').getPublicUrl(path);
+  return data.publicUrl;
+}
+
+function ImageUploadField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setUploadError('');
+    try {
+      const url = await uploadToStorage(file, 'tech-icons');
+      onChange(url);
+    } catch (err: AnyData) {
+      setUploadError(err?.message || 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <label className={labelCls}>Image / Logo</label>
+      <div className="flex gap-2 items-start">
+        <div className="flex-1 space-y-2">
+          <input
+            name="image_url"
+            className={inp}
+            value={value}
+            onChange={e => onChange(e.target.value)}
+            placeholder="https://example.com/logo.png or Google Drive link"
+          />
+          <label className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-xl border border-dashed border-[var(--color-primary)]/40 hover:border-[var(--color-primary)] transition-all text-xs text-[var(--color-on-surface-variant)] ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+            <span className="material-symbols-outlined text-sm">{uploading ? 'sync' : 'upload'}</span>
+            <span>{uploading ? 'Uploading...' : 'Upload from device'}</span>
+            <input type="file" accept="image/*" className="hidden" onChange={handleFile} disabled={uploading} />
+          </label>
+          {uploadError && <p className="text-[10px] text-red-400">{uploadError}. Make sure &apos;portfolio-images&apos; bucket exists in Supabase Storage.</p>}
+        </div>
+        {value && (
+          <div className="w-14 h-14 rounded-xl overflow-hidden border border-[var(--glass-border)] flex items-center justify-center bg-[var(--color-surface-container)]/40 shrink-0">
+            <img src={resolveImageUrl(value)} alt="preview" className="w-10 h-10 object-contain" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function TechnologyModal({ editingItem, technologiesList, onSubmit, onCancel }: {
   editingItem: AnyData;
   technologiesList: AnyData[];
@@ -23,13 +82,14 @@ function TechnologyModal({ editingItem, technologiesList, onSubmit, onCancel }: 
     <form onSubmit={onSubmit} className="space-y-4">
       <h3 className="text-lg font-bold text-glow text-[var(--color-primary)]">{editingItem ? 'Edit Technology' : 'Add Technology'}</h3>
       <input type="hidden" name="id" defaultValue={editingItem?.id || ''} />
+      <input type="hidden" name="image_url" value={imageUrl} readOnly />
       <div><label className={labelCls}>Name</label><input name="name" required className={inp} defaultValue={editingItem?.name || ''} placeholder="Python" /></div>
       <div>
         <label className={labelCls}>Display Type</label>
         <select name="type" required className={inp} value={type} onChange={e => setType(e.target.value)}>
           <option value="icon">Icon (Material Symbol)</option>
           <option value="text">Text Label (e.g. JS, PY)</option>
-          <option value="image">Image / Logo URL</option>
+          <option value="image">Image / Logo</option>
         </select>
       </div>
 
@@ -49,15 +109,7 @@ function TechnologyModal({ editingItem, technologiesList, onSubmit, onCancel }: 
       )}
 
       {type === 'image' && (
-        <div>
-          <label className={labelCls}>Image / Logo URL (direct link or Google Drive)</label>
-          <input name="image_url" className={inp} value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="https://example.com/logo.png" />
-          {imageUrl && (
-            <div className="mt-2 w-14 h-14 rounded-xl overflow-hidden border border-[var(--glass-border)] flex items-center justify-center bg-[var(--color-surface-container)]/40">
-              <img src={resolveImageUrl(imageUrl)} alt="preview" className="w-10 h-10 object-contain" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-            </div>
-          )}
-        </div>
+        <ImageUploadField value={imageUrl} onChange={setImageUrl} />
       )}
 
       <div className="grid grid-cols-2 gap-4">

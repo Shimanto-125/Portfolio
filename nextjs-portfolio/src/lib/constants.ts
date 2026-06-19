@@ -1,14 +1,17 @@
 // Fallback data used when Supabase is not configured or returns no data
 
-// Converts Google Drive share URLs to direct embeddable image URLs
+// Converts Google Drive share URLs to embeddable thumbnail URLs
 export function resolveImageUrl(url: string): string {
   if (!url) return '';
-  // https://drive.google.com/file/d/FILE_ID/view...
+  // https://drive.google.com/file/d/FILE_ID/...
   const fileMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (fileMatch) return `https://drive.google.com/uc?export=view&id=${fileMatch[1]}`;
+  if (fileMatch) return `https://drive.google.com/thumbnail?id=${fileMatch[1]}&sz=w800`;
   // https://drive.google.com/open?id=FILE_ID
   const openMatch = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
-  if (openMatch) return `https://drive.google.com/uc?export=view&id=${openMatch[1]}`;
+  if (openMatch) return `https://drive.google.com/thumbnail?id=${openMatch[1]}&sz=w800`;
+  // https://drive.google.com/uc?id=FILE_ID or export=view&id=FILE_ID
+  const ucMatch = url.match(/drive\.google\.com\/uc\?.*?id=([a-zA-Z0-9_-]+)/);
+  if (ucMatch) return `https://drive.google.com/thumbnail?id=${ucMatch[1]}&sz=w800`;
   return url;
 }
 
