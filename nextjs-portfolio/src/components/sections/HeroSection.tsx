@@ -24,6 +24,7 @@ interface Props {
   heroPrimaryBtn?: string;
   heroSecondaryBtn?: string;
   heroImageUrl?: string;
+  heroImageReady?: boolean;
   competitiveProfiles?: CompetitiveProfile[];
   socialGithub?: string;
   socialLinkedin?: string;
@@ -138,7 +139,7 @@ function statLine(p: CompetitiveProfile): string {
 export default function HeroSection({
   heroRole, heroSubRole, cvUrl,
   heroGreeting, heroDescription, heroPrimaryBtn, heroSecondaryBtn,
-  heroImageUrl,
+  heroImageUrl, heroImageReady = true,
   competitiveProfiles = [],
   socialGithub = 'https://github.com/Shimanto-125',
   socialLinkedin = 'https://www.linkedin.com/in/abir-shimanto-b10197291',
@@ -225,7 +226,15 @@ export default function HeroSection({
         <div className="relative w-60 h-60 md:w-[340px] md:h-[340px]">
           <div className="absolute inset-0 organic-blob bg-gradient-to-tr from-[var(--color-primary)]/20 via-transparent to-[var(--color-secondary)]/20 border-2 border-[var(--color-primary)]/30 bloom-primary" />
           <div className="absolute inset-4 organic-blob overflow-hidden bg-[var(--color-surface-container-low)] border border-[var(--glass-border)]">
-            <img alt="Md. Abir Shimanto Portfolio" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" src={resolveImageUrl(heroImageUrl || '') || '/profile.jpg'} />
+            {!heroImageReady ? (
+              <div className="w-full h-full animate-pulse bg-(--color-primary)/10" />
+            ) : (
+              <img
+                alt="Md. Abir Shimanto Portfolio"
+                className="w-full h-full object-cover transition-all duration-700 hover:scale-105"
+                src={resolveImageUrl(heroImageUrl || '') || '/profile.jpg'}
+              />
+            )}
           </div>
 
           {/* Neural SVG lines (Desktop only) */}

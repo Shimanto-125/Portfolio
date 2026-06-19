@@ -10,7 +10,7 @@ type AnyData = any;
 const inp = "w-full bg-[var(--color-surface-container)]/60 border border-[var(--glass-border)] rounded-xl px-4 py-2.5 text-[var(--color-on-surface)] focus:border-[var(--color-primary-container)] focus:outline-none transition-all text-sm";
 const labelCls = "block text-xs font-semibold text-[var(--color-on-surface-variant)] uppercase tracking-wider mb-1.5";
 
-async function uploadToStorage(file: File, folder: string): Promise<string> {
+async function uploadToStorage(file: File, folder: string = 'uploads'): Promise<string> {
   if (!supabase) throw new Error('Supabase not configured');
   const ext = file.name.split('.').pop() || 'png';
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -21,7 +21,7 @@ async function uploadToStorage(file: File, folder: string): Promise<string> {
   return data.publicUrl;
 }
 
-function ImageUploadField({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+function ImageUploadField({ value, onChange, folder = 'tech-icons' }: { value: string; onChange: (url: string) => void; folder?: string }) {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
 
@@ -31,7 +31,7 @@ function ImageUploadField({ value, onChange }: { value: string; onChange: (url: 
     setUploading(true);
     setUploadError('');
     try {
-      const url = await uploadToStorage(file, 'tech-icons');
+      const url = await uploadToStorage(file, folder);
       onChange(url);
     } catch (err: AnyData) {
       setUploadError(err?.message || 'Upload failed');
@@ -574,15 +574,7 @@ export default function AdminPage() {
                   <div><label className={labelCls}>Primary Button Text</label><input className={inp} value={metaHeroPrimaryBtn} onChange={e => setMetaHeroPrimaryBtn(e.target.value)} placeholder="Say Hello" /></div>
                   <div><label className={labelCls}>Secondary Button Text</label><input className={inp} value={metaHeroSecondaryBtn} onChange={e => setMetaHeroSecondaryBtn(e.target.value)} placeholder="Download CV" /></div>
                 </div>
-                <div>
-                  <label className={labelCls}>Hero Profile Image URL</label>
-                  <input className={inp} value={metaHeroImageUrl} onChange={e => setMetaHeroImageUrl(e.target.value)} placeholder="https://example.com/photo.jpg or Google Drive link" />
-                  {metaHeroImageUrl && (
-                    <div className="mt-2 rounded-xl overflow-hidden w-20 h-20 border border-[var(--glass-border)]">
-                      <img src={resolveImageUrl(metaHeroImageUrl)} alt="hero preview" className="w-full h-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                    </div>
-                  )}
-                </div>
+                <ImageUploadField value={metaHeroImageUrl} onChange={setMetaHeroImageUrl} folder="hero" />
                 <div><label className={labelCls}>CV Download URL</label><input className={inp} value={metaCvUrl} onChange={e => setMetaCvUrl(e.target.value)} /></div>
                 <div><label className={labelCls}>Status</label>
                   <select className={inp} value={metaAvailable} onChange={e => setMetaAvailable(e.target.value)}>

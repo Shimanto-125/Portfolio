@@ -32,6 +32,7 @@ type AnyData = any;
 
 export default function HomePage() {
   const [metadata, setMetadata] = useState(FALLBACK_METADATA);
+  const [metadataLoaded, setMetadataLoaded] = useState(false);
   const [education, setEducation] = useState<AnyData[]>(FALLBACK_EDUCATION);
   const [qualifications, setQualifications] = useState<AnyData[]>(FALLBACK_QUALIFICATIONS);
   const [skills, setSkills] = useState<AnyData[]>(FALLBACK_SKILLS);
@@ -42,7 +43,7 @@ export default function HomePage() {
 
   useEffect(() => {
     async function loadData() {
-      if (!supabase) return;
+      if (!supabase) { setMetadataLoaded(true); return; }
 
       try {
         // Site Metadata
@@ -52,6 +53,7 @@ export default function HomePage() {
           metaData.forEach((item: { key: string; value: string }) => { map[item.key] = item.value; });
           setMetadata((prev) => ({ ...prev, ...map }));
         }
+        setMetadataLoaded(true);
 
         // Education
         const { data: eduData } = await supabase.from('education').select('*').order('created_at', { ascending: true });
@@ -82,6 +84,7 @@ export default function HomePage() {
         if (techData && techData.length > 0) setTechnologies(techData);
       } catch (err) {
         console.error('Failed to load data from Supabase:', err);
+        setMetadataLoaded(true);
       }
     }
 
@@ -103,6 +106,7 @@ export default function HomePage() {
           heroPrimaryBtn={metadata.hero_primary_btn}
           heroSecondaryBtn={metadata.hero_secondary_btn}
           heroImageUrl={metadata.hero_image_url}
+          heroImageReady={metadataLoaded}
           competitiveProfiles={competitiveProfiles}
           socialGithub={metadata.social_github}
           socialLinkedin={metadata.social_linkedin}
