@@ -26,7 +26,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "NEURAL_PORTFOLIO_v2.0 | Md. Abir Shimanto",
+  title: "Md. Abir Shimanto",
   description:
     "ML Trainer & Engineer | Competitive Programmer — Empowering future innovators through machine learning and AI. Available for projects, research and collaborations.",
   keywords: [
