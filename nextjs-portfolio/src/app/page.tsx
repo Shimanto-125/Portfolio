@@ -24,6 +24,7 @@ import QualificationsSection from '@/components/sections/QualificationsSection';
 import ResearchSection from '@/components/sections/ResearchSection';
 import ProjectsSection from '@/components/sections/ProjectsSection';
 import ContactSection from '@/components/sections/ContactSection';
+import ScrollProgressTrack from '@/components/ScrollProgressTrack';
 
 const NeuronCanvas = dynamic(() => import('@/components/NeuronCanvas'), { ssr: false });
 
@@ -96,7 +97,8 @@ export default function HomePage() {
       <NeuronCanvas />
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 md:px-16 pt-16 pb-16">
+      {/* <main className="max-w-7xl mx-auto px-4 md:px-16 pt-16 pb-16"> */}
+      <main className="max-w-7xl mx-auto px-4 md:px-16 pt-16 pb-16 relative">
         <HeroSection
           heroRole={metadata.hero_role}
           heroSubRole={metadata.hero_sub_role}
@@ -116,11 +118,13 @@ export default function HomePage() {
         {/* Scroll indicator */}
         <button
           onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-          className="flex flex-col items-center gap-2 opacity-40 hover:opacity-100 transition-opacity mt-20 cursor-pointer mx-auto"
+          {/* className="flex flex-col items-center gap-2 opacity-40 hover:opacity-100 transition-opacity mt-20 cursor-pointer mx-auto" */}
+          className="flex md:hidden flex-col items-center gap-2 opacity-40 hover:opacity-100 transition-opacity mt-20 cursor-pointer mx-auto"
         >
           <span className="material-symbols-outlined animate-bounce">mouse</span>
           <span className="font-mono text-[10px] uppercase tracking-[0.2em]">Scroll Down</span>
         </button>
+      <ScrollProgressTrack />
 
         <AboutSection
           aboutImageUrl={metadata.about_image_url}
