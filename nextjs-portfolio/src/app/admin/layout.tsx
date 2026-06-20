@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "NEURAL_PORTFOLIO | Admin Dashboard",
+  title: "Admin Dashboard",
   description: "Admin dashboard for managing portfolio content",
 };
 
