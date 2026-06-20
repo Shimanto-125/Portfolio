@@ -119,7 +119,7 @@ export default function HomePage() {
         <button
           onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
           className="flex flex-col items-center gap-2 opacity-40 hover:opacity-100 transition-opacity mt-20 cursor-pointer mx-auto" 
-          {/* className="flex md:hidden flex-col items-center gap-2 opacity-40 hover:opacity-100 transition-opacity mt-20 cursor-pointer mx-auto" */}
+          
         >
           <span className="material-symbols-outlined animate-bounce">mouse</span>
           <span className="font-mono text-[10px] uppercase tracking-[0.2em]">Scroll Down</span>
